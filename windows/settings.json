@@ -1,0 +1,55 @@
+{
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.colorTheme": "Night Owl",
+  "files.eol": "\n",
+  "extensions.ignoreRecommendations": false,
+  "editor.fontSize": 16,
+  "files.associations": {
+    "*.tpl": "html",
+    "*.vue": "javascript",
+    "*.ts": "typescript",
+    "*.tsx": "typescriptreact",
+    ".bash*": "shellscript",
+    ".gitconfig*": "shellscript"
+  },
+  "[javascript]": {
+    "editor.tabSize": 2
+  },
+  "[typescirpt]": {
+    "editor.tabSize": 2
+  },
+  "[typescirptreact]": {
+    "editor.tabSize": 2
+  },
+  "[html]": {
+    "editor.tabSize": 2
+  },
+  "[css]": {
+    "editor.tabSize": 2
+  },
+  "[python]": {
+    "editor.tabSize": 4
+  },
+  "[rust]": {
+    "editor.tabSize": 4
+  },
+  "[shellscript]": {
+    "editor.tabSize": 2
+  },
+  "[go]": {
+    "editor.tabSize": 4,
+    "editor.insertSpaces": false
+  },
+  "[Makefile]": {
+    "editor.tabSize": 4,
+    "editor.insertSpaces": false
+  },
+  "editor.fontFamily": "'HackGen Console NF', 'FiraCode NF', 'Noto Sans CJK JP', 'Cascadia Code', Consolas, 'Courier New', monospace",
+  "workbench.startupEditor": "newUntitledFile",
+  "terminal.integrated.fontSize": 16,
+  "javascript.validate.enable": false,
+  "remote.SSH.remotePlatform": {
+    "debian": "linux"
+  },
+  "editor.unicodeHighlight.nonBasicASCII": false
+}

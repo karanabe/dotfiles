@@ -1,0 +1,142 @@
+#!/bin/bash
+# update
+alias dotup="`cat $HOME/.local/.dotfiles`/update.sh && . $HOME/.bash_profile"
+
+# global
+alias sudo='sudo '
+alias dotfiles='cd $HOME/project/code/dotfiles'
+alias lstat="stat --format='%a %A %10U %10G %20F %n' ./* .*"
+alias lstats="stat --printf='%a %A %10U %10G %20F %n\n'"
+alias lgrep="stat --format='%a %A %10U %10G %20F %n' ./* .* | grep"
+
+# docker
+alias dc="docker-compose"
+alias dcu="docker-compose -p docker up -d"
+alias dcd="docker-compose -p docker down"
+alias dcs="docker-compose -p docker stop"
+alias dstart="docker start"
+alias dstop="docker stop"
+dce() { docker-compose -p docker exec $1 /bin/bash; }
+de() { docker exec -it $1 /bin/bash --login; }
+alias drmi="docker rmi"
+alias drm="docker rm"
+alias di="docker images"
+alias dcl="docker container ls -a"
+alias dip="docker image prune"
+alias dcp="docker container prune"
+alias dv="docker volume"
+alias dvl="docker volume ls"
+alias dl="docker logs"
+
+# ps
+alias psa="ps aux"
+
+# ls
+alias lla='ls -la'
+alias l="clear && ll"
+
+# less
+alias les="/usr/share/vim/vim90/macros/less.sh"
+alias less="/usr/bin/less"
+
+# grep
+alias rg="rg -g '!.git/' -g '!node_modules/'"
+
+# cd
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias ~="cd ~"
+
+# tar
+alias tarxz="tar Jxf"
+alias targz="tar zxf"
+
+# git
+alias gitinit="git commit --allow-empty -m 'Init commit'"
+gitupstream() { git remote add upstream $1; }
+gitupfetch() { git fetch upstream; git checkout main; git merge upstream/main; }
+alias gitchmod="git update-index --add --chmod=+x"
+alias ga="git add"
+alias gb="git branch -a"
+alias gc="git commit"
+alias gs="git status"
+alias gp="git push"
+alias gpm="git push origin master"
+alias gpf="git push -f"
+alias gpfm="git push -f origin master"
+alias gco="git checkout"
+gpta() { git reset --hard HEAD^ && git am --3way ./patch/$@; }
+alias gsign="gitsign"
+
+
+# gpg
+## Expire
+## gedit XXXX
+## key YYYY(Sub key)
+## expire
+## save
+#
+## gpg --with-keygrip --list-key
+## rm ~/.gnupg/private-keys-v1.d/{keygrip}.key
+alias gplist="gpg --list-keys --keyid-format LONG"
+alias gpedit="gpg --expert --edit-key"
+alias gpgen="gpg --expert --full-gen-key"
+alias gprip="gpg --with-keygrip --list-key"
+alias gpexp="gpg --armor --export"
+alias gpexpsec="gpg --armor --export-secret-key"
+gprm() { rm ~/.gnupg/private-keys-v1.d/$1.key; }
+
+# ssh
+alias sshgen="ssh-keygen -t ed25519 -C"
+
+# python3
+alias venv='source $HOME/.local/usr/pydev/dev/bin/activate'
+alias von=". bin/activate"
+alias voff='deactivate'
+
+# python2
+alias venv2='source $HOME/.local/usr/pydev/dev2/bin/activate'
+
+# rust
+#alias cargo="docker run --rm --user $(id -u):$(id -g) --env PATH='/home/rust/.cargo/bin:$PATH' -v $HOME/.cargo/registry:/home/rust/.cargo/registry -v $HOME/.cargo/credentials:/home/rust/.cargo/credentials -v $PWD:/tmp/dev -w /tmp/dev rust:latest cargo"
+#alias rustc="docker run --rm --user $(id -u):$(id -g) --env PATH='/home/rust/.cargo/bin:$PATH' -v $HOME/.cargo/registry:/home/rust/.cargo/registry -v $HOME/.cargo/credentials:/home/rust/.cargo/credentials -v $PWD:/tmp/dev -w /tmp/dev rust:latest rustc"
+cargobin() {
+  git clone git@github.com:karanabe/rust-template.git ./$1;
+  cd $1;
+  rm -rf .git;
+  git init;
+  git commit --allow-empty -m 'Init commit';
+  grep -rl 'rust-template' . | xargs sed -i -e "s/rust-template/$1/g";
+}
+
+# python
+#alias py="docker run --rm --user "$(id -u)":"$(id -g)" -v "$PWD":"$PWD" -w "$PWD" python:3.9-slim-buster python"
+#alias pi="docker run --rm --user "$(id -u)":"$(id -g)" -v "$PWD":"$PWD" -w "$PWD" python:3.9-slim-buster pip"
+
+# alphabet
+alias a="apt"
+alias b="echo 'Not setting yet'"
+alias c="cat"
+alias d="docker"
+alias e="vim"
+alias f="find . -name"
+alias g="grep --color=auto"
+alias h="echo 'Not setting yet'"
+alias i="sudo apt install --yes"
+alias j="echo 'Not setting yet'"
+alias k="kill -9"
+alias l="/usr/share/vim/vim90/macros/less.sh"
+alias n="npm"
+alias o="open"
+alias p="python"
+alias q="exit"
+alias r="rm -i"
+alias s="git status"
+alias t="tree -C"
+alias u="cd .."
+alias v="vim"
+alias w="echo 'Not setting yet'"
+alias x="exit"
+alias y="echo 'Not setting yet'"
+alias z="echo 'Not setting yet'"

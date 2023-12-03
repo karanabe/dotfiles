@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# keybind
+# set -o vi
+# bind '"jj": vi-movement-mode'
+
+# path to little scripts
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/usr/bin:$PATH"
+#export PATH="/usr/sbin:$PATH"
+export PATH=$HOME/package/dotfiles/.local/bin:$PATH
+export PATH=$HOME/project/code/rust/scripts/target/x86_64-unknown-linux-musl/release:$PATH
+
+# lang
+#
+# nodejs/nodenv
+export PATH="$HOME/.local/lang/nodenv/bin:$PATH"
+export NODENV_ROOT="$HOME/.local/lang/nodenv"
+eval "$(nodenv init -)"
+
+# nodejs/pnpm
+export PNPM_HOME="$HOME/.local/lang/pnpm"
+
+# ruby/rbenv
+export RBENV_ROOT="$HOME/.local/lang/rbenv"
+export PATH="$RBENV_ROOT/bin:$PATH"
+eval "$(rbenv init -)"
+
+# python/pyenv
+export PYENV_ROOT="$HOME/.local/lang/pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+source $HOME/.local/usr/pydev/dev/bin/activate
+
+# rust
+export CARGO_HOME="$HOME/.local/lang/cargo"
+export RUSTUP_HOME="$HOME/.local/lang/rustup"
+export PATH="$CARGO_HOME/bin:$PATH"
+
+# default editor
+export EDITOR='vim'
+
+# openssl
+#export OPENSSL_LIB_DIR=/usr/lib/x86_64-linux-gnu/
+#export OPENSSL_INCLUDE_DIR=/usr/include/openssl/
+export OPENSSL_LIB_DIR=/usr/local/musl/lib64/
+export OPENSSL_INCLUDE_DIR=/usr/local/musl/include
+export OPENSSL_STATIC=true
+export PKG_CONFIG_ALLOW_CROOSS=1
+
+# VSCode
+export PATH="/mnt/d/ProgramFiles/Microsoft VS Code/bin:$PATH"
+
+# gpg git
+export GPG_TTY=$(tty)
+

@@ -1,0 +1,52 @@
+[include]
+  path = ~/.gitconfig.user
+
+[url "github:"]
+  pushInsteadOf = https://github.com/
+  pushInsteadOf = git@github.com:
+
+[alias]
+  alias = !git config --get-regexp '^alias\\.' | sed 's/alias\\.\\([^ ]*\\) \\(.*\\)/\\1\\\t => \\2/' | sort
+  ls = "log --date=short --pretty=format:'%C(green)%cd%Creset %C(yellow)%h%Creset %C(cyan)%cn%Creset %C(magenta)%G?%Creset %s '"
+  ll = "log --date=short --pretty=format:'%C(green)%cd%Creset %C(yellow)%h%Creset %C(cyan)%cn%Creset %C(magenta)%G?%Creset %B%- '"
+  lg = "log --date=short --oneline --graph --pretty=format:'%C(green)%cd%Creset %C(yellow)%h%Creset %C(cyan)%cn%Creset %s '"
+  ln = "log --date=short --oneline --pretty=format:'%C(green)%cd%Creset %C(yellow)%h%Creset %C(cyan)%cn%Creset %s' --decorate --numstat"
+
+  a = add .
+  aa = !git add .  && git add -u && git status
+  amend = commit --amend --reuse-message=HEAD
+  c = commit
+  co = checkout
+  cl = clone
+  b = branch
+  m = merge
+  p = push
+  po = push origin master
+  pl = pull
+  patch = format-patch HEAD^ -o ./patch
+  s = status
+  st = stash
+  sh = show
+  refresh= !git fetch origin && git remote prune origin
+
+[core]
+  editor = vim
+
+[color]
+  ui = auto
+
+[commit]
+  gpgsign = true
+  template = ~/.gitmessage
+
+[tag]
+  gpgSign = true
+
+[pull]
+  rebase = false
+
+[trailer "author"]
+  key = "Co-authored-by: "
+
+[trailer "sign"]
+  key = "Sign-off-by: "

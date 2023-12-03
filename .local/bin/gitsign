@@ -1,0 +1,12 @@
+#!/bin/bash
+
+PATCH_FILE_NAME=$1
+SPLIT_FILE_NAME=(${PATCH_FILE_NAME//./ })
+PATCH_SIGNED_FILE_NAME="${SPLIT_FILE_NAME[0]}-signed.${SPLIT_FILE_NAME[1]}"
+
+git am --3way ./patch/${PATCH_FILE_NAME}
+git interpret-trailers \
+  --trailer "author: $(git log --pretty='%an <%ae>' -1)" \
+  --trailer "sign: $(git config user.name) <$(git config user.email)>" \
+  ./patch/${PATCH_FILE_NAME} > \
+  ./patch/${PATCH_SIGNED_FILE_NAME}

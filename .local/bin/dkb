@@ -1,0 +1,29 @@
+#!/bin/bash
+
+DOCKER_USER="kb"
+DOCKER_SCRIPT="--login"
+
+if [ $# == 1 ]; then
+  DOCKER_USER=$1
+fi
+
+if [  $# == 2 ]; then
+  DOCKER_USER=$1
+  DOCKER_SCRIPT=$2
+fi
+
+docker container run \
+  --net=bridge \
+  -v kernel:/home/kb/kernel \
+  -v /tmp:/home/kb/tmp \
+  -w /home/kb \
+  -it --rm \
+  -e TZ=Asia/Tokyo \
+  -e TERM=xterm-256color \
+  -e IS_DOCKER=true \
+  --user $DOCKER_USER \
+  --name kernel-build \
+  --hostname KERNELBUILD \
+  kb/docker-kernelbuild:latest \
+  /bin/bash $DOCKER_SCRIPT
+

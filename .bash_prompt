@@ -1,0 +1,52 @@
+# git branch
+function parse_git_branch {
+    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
+}
+
+# python venv
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+# bash prompt color
+function bash_option {
+  HEADER="on \e[32m"
+  PY_VIRTUAL_ENV=""
+  GIT_BRANCH=`parse_git_branch`
+  if [ -n "$VIRTUAL_ENV" ]; then
+    PY_VIRTUAL_ENV="`basename \"$VIRTUAL_ENV\"`"
+  fi
+
+  if [ -n "$GIT_BRANCH" ] && [ -n "$VIRTUAL_ENV" ]; then
+    echo -en "${HEADER}(${GIT_BRANCH}/${PY_VIRTUAL_ENV})"
+  elif [ -n "$GIT_BRANCH" ]; then
+    echo -en "${HEADER}(${GIT_BRANCH})"
+  elif [ -n "$VIRTUAL_ENV" ]; then
+    echo -en "${HEADER}(${PY_VIRTUAL_ENV})"
+  fi
+}
+
+function git_prompt {
+  GIT_BRANCH=`parse_git_branch`
+  if [ -n "$GIT_BRANCH" ]; then
+    echo -en " (${GIT_BRANCH})"
+  else
+    echo -en ""
+  fi
+}
+
+function host_prompt {
+  currenthost=`uname -n`
+  echo -en "${currenthost,,}"
+}
+
+function directory_prompt {
+  basedir=`basename $(pwd)`
+  printf "%-12s" $basedir
+}
+
+# prompt
+if [ "$(whoami)" != "root" ];
+  then
+    export PS1='${debian_chroot:+($debian_chroot)}\[\e[0;36m\]\h\[\e[m\]\[\e[00;33m\]$(git_prompt)\[\e[m\] \[\e[00;31m\]>\[\e[00;33m\]>\[\e[00;32m\]>\[\e[m\] '
+  else
+    export PS1='${debian_chroot:+($debian_chroot)}\[\e[0;36m\]$(host_prompt)\[\e[m\]\[\e[0;31m\]$(git_prompt)\[\e[m\] \[\e[0;31m\]|\[\e[m\] '
+fi

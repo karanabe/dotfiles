@@ -1,0 +1,8 @@
+set show-all-if-ambiguous on
+set completion-ignore-case on
+set colored-stats on
+set colored-completion-prefix on
+set visible-stats on
+set bell-style none
+set mark-directories on
+set match-hidden-files on
