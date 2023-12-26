@@ -54,3 +54,6 @@ export PATH="/mnt/d/ProgramFiles/Microsoft VS Code/bin:$PATH"
 # gpg git
 export GPG_TTY=$(tty)
 
+# k8s
+export KUBECONFIG=$HOME/.kube/config
+
