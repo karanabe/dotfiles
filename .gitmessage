@@ -1,23 +1,64 @@
 
 
-# Change folder or function: {X} some message in | 50 characters
-# {X} is Fix, Update, Change, Rename, Remove, Feat, Style, Resolve
+# Commit Message Header should be kept within 50  | 50 characters
+# Wrap the body at 72 characters                                        | 72 characters
 
-# Use the body to explain what and why vs. how
-# Wrap the body at 72 characters                                       | 72 characters
+# Header
+# <type>(<scope>): <short summary>
 
-# detail for change
-# - something: some message
-# - filename: change point
-# - commit id: some message
+# Commit Type: build | ci | docs | feat | fix | perf | refactor | study | test
+# build: Changes that affect the build system or external dependencies
+# ci: Change to CI configuration files and scripts
+# docs: Documentation only changes
+# feat: A new feature
+# perf: A code change that improves performance
+# refactor: A code chagne that neither fixes a bug nor adds a feature
+# study: A code add or change by study (examples: atcoder code)
+# test: Adding missing tests or correcting existing tests
+# misc: No reason, this is worse case
+
+# Commit Scope: this is option
+# Most of in this case is cargo project
+# monorepo or module
+
+# Summary
+# Use the summary field to provide a succinct description of the change:
+# - use the imperative, present tense: "change" not "changed" not "changes"
+# - don't capitalize the first letter
+# - no dot (.) at the end
+
+# Commit Message Body
+# Just as in the summary, use the imperative, present tense: "fix" not "fixed" nor "fixes".
+
+# Explain the motivation for the change in the commit message body.
+# This commit message should explain why you are making the change.
+# You can include a comparison of the previous behavior with the new behavior
+# in order to illustrate the impact of the change.
 
 # footer if you have
-# Fixed #111
-# Resolved # 222
-# See #333
+# Keywords to close an issue:
+# close, closes, closed
+# fix, fixes, fixed
+# resolve, resolves, resolved
+# Fix #111
+# Close #444
 
-# example message
-# test: Adding missing tests or correcting existing tests
-# fix: A bug fix
-# feat: A new feature
-# style: Changes that do not affect the meaning of the code (white-space formatting, missing semi-colons, etc)
+# Commit Message Footer
+# The footer can contain information about breaking changes and deprecations and
+# is also the place to reference GitHub issues, Jira tickets, and other PRs that
+# this commit closes or is related to. For example:
+
+# BREAKING CHANGE: <breaking change summary>
+# <BLANK LINE>
+# <breaking change description + migration instructions>
+# <BLANK LINE>
+# <BLANK LINE>
+# Fixes #<issue number>
+
+# DEPRECATED: <what is deprecated>
+# <BLANK LINE>
+# <deprecation description + recommended update path>
+# <BLANK LINE>
+# <BLANK LINE>
+# Closes #<pr number>
+

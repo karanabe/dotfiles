@@ -1,5 +1,8 @@
 #!/bin/bash
-FILE_DIR=$(cd $(dirname $BASH_SOURCE); pwd)
+FILE_DIR=$(
+	cd $(dirname $BASH_SOURCE)
+	pwd
+)
 
 # clear files
 rm -rf $HOME/.bash_history $HOME/.bash_logout $HOME/.bashrc $HOME/.lesshst $HOME/.profile
@@ -7,7 +10,6 @@ rm -rf $HOME/.zshrc $HOME/.zshenv $HOME/.zprofile $HOME/.zshalias $HOME/.gnupg $
 
 # set link to bash files
 ln -s $FILE_DIR/.zshrc $HOME/.zshrc
-
 
 mkdir -p $HOME/.local/bin
 mkdir -p $HOME/.local/lang
@@ -24,6 +26,8 @@ mkdir -p $HOME/project/docs
 
 mkdir -p $HOME/downloads
 mkdir -p $HOME/tmp
+
+mkdir -p $HOME/.config/nvim/lua/plugins
 
 sudo chmod 700 $HOME/project
 sudo chmod 700 $HOME/downloads
@@ -43,6 +47,7 @@ ln -s $FILE_DIR/.gitconfig $HOME/.gitconfig
 ln -s $FILE_DIR/.gitmessage $HOME/.gitmessage
 ln -s $FILE_DIR/.vimrc $HOME/.vimrc
 ln -s $FILE_DIR/.tmux.conf $HOME/.tmux.conf
-ln -s $HOME/.local/share/vimplug $HOME/.vim
+ln -s $FILE_DIR/nvim $HOME/.config/nvim
+# ln -s $HOME/.local/share/vimplug $HOME/.vim
 ln -s $HOME/.visualarts/.gnupg $HOME/.gnupg
 ln -s $HOME/.visualarts/.ssh $HOME/.ssh

@@ -1,6 +1,6 @@
 #!/bin/bash
 # update
-alias dotup="`cat $HOME/.local/.dotfiles`/update.sh && . $HOME/.bash_profile"
+alias dotup="$(cat $HOME/.local/.dotfiles)/update.sh && . $HOME/.bash_profile"
 
 # global
 alias sudo='sudo '
@@ -8,6 +8,11 @@ alias dotfiles='cd $HOME/project/code/dotfiles'
 alias lstat="stat --format='%a %A %10U %10G %20F %n' ./* .*"
 alias lstats="stat --printf='%a %A %10U %10G %20F %n\n'"
 alias lgrep="stat --format='%a %A %10U %10G %20F %n' ./* .* | grep"
+
+# editor
+alias nvim="$HOME/.local/opt/nvim/currVer/bin/nvim"
+alias vim="$HOME/.local/opt/nvim/currVer/bin/nvim"
+alias vi="$HOME/.local/opt/nvim/currVer/bin/nvim"
 
 # docker
 alias dc="docker-compose"
@@ -32,8 +37,12 @@ alias dl="docker logs"
 alias psa="ps aux"
 
 # ls
-alias lla='ls -la'
-alias l="clear && ll"
+alias ls="eza --git --hyperlink --header"
+alias lsa="eza -la --git --hyperlink --header; pwd"
+alias ll="eza -l --git --hyperlink --header; pwd"
+
+# terminal
+alias cl="clear && pwd"
 
 # less
 alias les="/usr/share/vim/vim90/macros/less.sh"
@@ -55,7 +64,11 @@ alias targz="tar zxf"
 # git
 alias gitinit="git commit --allow-empty -m 'Init commit'"
 gitupstream() { git remote add upstream $1; }
-gitupfetch() { git fetch upstream; git checkout main; git merge upstream/main; }
+gitupfetch() {
+	git fetch upstream
+	git checkout main
+	git merge upstream/main
+}
 alias gitchmod="git update-index --add --chmod=+x"
 alias ga="git add"
 alias gb="git branch -a"
@@ -68,7 +81,6 @@ alias gpfm="git push -f origin master"
 alias gco="git checkout"
 gpta() { git reset --hard HEAD^ && git am --3way ./patch/$@; }
 alias gsign="gitsign"
-
 
 # gpg
 ## Expire
@@ -102,12 +114,12 @@ alias venv2='source $HOME/.local/usr/pydev/dev2/bin/activate'
 #alias cargo="docker run --rm --user $(id -u):$(id -g) --env PATH='/home/rust/.cargo/bin:$PATH' -v $HOME/.cargo/registry:/home/rust/.cargo/registry -v $HOME/.cargo/credentials:/home/rust/.cargo/credentials -v $PWD:/tmp/dev -w /tmp/dev rust:latest cargo"
 #alias rustc="docker run --rm --user $(id -u):$(id -g) --env PATH='/home/rust/.cargo/bin:$PATH' -v $HOME/.cargo/registry:/home/rust/.cargo/registry -v $HOME/.cargo/credentials:/home/rust/.cargo/credentials -v $PWD:/tmp/dev -w /tmp/dev rust:latest rustc"
 cargobin() {
-  git clone git@github.com:karanabe/rust-template.git ./$1;
-  cd $1;
-  rm -rf .git;
-  git init;
-  git commit --allow-empty -m 'Init commit';
-  grep -rl 'rust-template' . | xargs sed -i -e "s/rust-template/$1/g";
+	git clone git@github.com:karanabe/rust-template.git ./$1
+	cd $1
+	rm -rf .git
+	git init
+	git commit --allow-empty -m 'Init commit'
+	grep -rl 'rust-template' . | xargs sed -i -e "s/rust-template/$1/g"
 }
 
 # python
@@ -126,7 +138,7 @@ alias h="echo 'Not setting yet'"
 alias i="sudo apt install --yes"
 alias j="echo 'Not setting yet'"
 alias k="kill -9"
-alias l="/usr/share/vim/vim90/macros/less.sh"
+alias l="clear && ll"
 alias n="npm"
 alias o="open"
 alias p="python"
