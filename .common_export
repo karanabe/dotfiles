@@ -4,6 +4,8 @@
 # set -o vi
 # bind '"jj": vi-movement-mode'
 
+source /etc/os-release
+
 # path to little scripts
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.local/usr/bin:$PATH"
@@ -14,18 +16,19 @@ export PATH=$HOME/.local/opt/nvim/currVer/bin:$PATH
 
 # lang
 #
-# nodejs/nodenv
-export PATH="$HOME/.local/lang/nodenv/bin:$PATH"
-export NODENV_ROOT="$HOME/.local/lang/nodenv"
-eval "$(nodenv init -)"
+# nodejs/volta
+export VOLTA_HOME="$HOME/.local/lang/volta"
+export PATH="$VOLTA_HOME/bin:$PATH"
 
 # nodejs/pnpm
 export PNPM_HOME="$HOME/.local/lang/pnpm"
 
-# ruby/rbenv
-export RBENV_ROOT="$HOME/.local/lang/rbenv"
-export PATH="$RBENV_ROOT/bin:$PATH"
-eval "$(rbenv init -)"
+if [ "$ID" == "debian" ]; then
+  # ruby/rbenv
+  export RBENV_ROOT="$HOME/.local/lang/rbenv"
+  export PATH="$RBENV_ROOT/bin:$PATH"
+  eval "$(rbenv init -)"
+fi
 
 # python/pyenv
 export PYENV_ROOT="$HOME/.local/lang/pyenv"
@@ -39,7 +42,7 @@ export RUSTUP_HOME="$HOME/.local/lang/rustup"
 export PATH="$CARGO_HOME/bin:$PATH"
 
 # default editor
-export EDITOR='vim'
+export EDITOR='nvim'
 
 # openssl
 #export OPENSSL_LIB_DIR=/usr/lib/x86_64-linux-gnu/
@@ -48,9 +51,6 @@ export OPENSSL_LIB_DIR=/usr/local/musl/lib64/
 export OPENSSL_INCLUDE_DIR=/usr/local/musl/include
 export OPENSSL_STATIC=true
 export PKG_CONFIG_ALLOW_CROOSS=1
-
-# VSCode
-export PATH="/mnt/d/ProgramFiles/Microsoft VS Code/bin:$PATH"
 
 # gpg git
 export GPG_TTY=$(tty)

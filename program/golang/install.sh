@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Enter here to newest golang package
-GOPACKAGE=go1.14.1.linux-amd64.tar.gz
+GOPACKAGE=go1.22.2.linux-amd64.tar.gz
 
 # Get golang package
 rm -rf $HOME/.local/lang/go

@@ -1,9 +1,10 @@
 #!/bin/bash
 # Load zshrc
-test -r $HOME/.zshrc && . $HOME/.zshrc
+#test -r $HOME/.zshrc && . $HOME/.zshrc
 
 # Load the shell dotfiles
-for file in ~/.{zshalias,zshenv}; do
-  [ -r "$file" ] && [ -f "$file" ] && source "$file" &>/dev/null
+for file in $HOME/.{zshalias,zshenv}; do
+  test -r $file && . $file
 done
 unset file
+

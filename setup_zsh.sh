@@ -8,16 +8,12 @@ FILE_DIR=$(
 rm -rf $HOME/.bash_history $HOME/.bash_logout $HOME/.bashrc $HOME/.lesshst $HOME/.profile
 rm -rf $HOME/.zshrc $HOME/.zshenv $HOME/.zprofile $HOME/.zshalias $HOME/.gnupg $HOME/.ssh
 
-# set link to bash files
-ln -s $FILE_DIR/.zshrc $HOME/.zshrc
-
 mkdir -p $HOME/.local/bin
 mkdir -p $HOME/.local/lang
 mkdir -p $HOME/.local/usr
 mkdir -p $HOME/.local/etc
 mkdir -p $HOME/.local/opt
 mkdir -p $HOME/.local/var
-mkdir -p $HOME/.local/share/vimplug
 mkdir -p $HOME/.visualarts/.ssh
 mkdir -p $HOME/.visualarts/.gnupg
 
@@ -27,7 +23,7 @@ mkdir -p $HOME/project/docs
 mkdir -p $HOME/downloads
 mkdir -p $HOME/tmp
 
-mkdir -p $HOME/.config/nvim/lua/plugins
+mkdir -p $HOME/.config
 
 sudo chmod 700 $HOME/project
 sudo chmod 700 $HOME/downloads
@@ -45,7 +41,7 @@ ln -s $FILE_DIR/.common_alias $HOME/.zshalias
 ln -s $FILE_DIR/.common_export $HOME/.zshenv
 ln -s $FILE_DIR/.gitconfig $HOME/.gitconfig
 ln -s $FILE_DIR/.gitmessage $HOME/.gitmessage
-ln -s $FILE_DIR/.vimrc $HOME/.vimrc
+#ln -s $FILE_DIR/.vimrc $HOME/.vimrc
 ln -s $FILE_DIR/.tmux.conf $HOME/.tmux.conf
 ln -s $FILE_DIR/nvim $HOME/.config/nvim
 # ln -s $HOME/.local/share/vimplug $HOME/.vim

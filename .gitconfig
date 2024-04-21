@@ -30,7 +30,7 @@
   refresh= !git fetch origin && git remote prune origin
 
 [core]
-  editor = vim
+  editor = nvim
 
 [color]
   ui = auto

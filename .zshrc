@@ -106,6 +106,10 @@ git_prompt() {
   fi
 }
 
+prompt_capital_host() {
+    echo "%{$(tr '[:lower:]' '[:upper:]' <<< "%m")%}"
+}
+
 configure_prompt() {
     prompt_symbol=㉿
     # Skull emoji for root terminal
@@ -125,7 +129,7 @@ configure_prompt() {
             RPROMPT=
             ;;
         karanabe)
-            PROMPT=$'${debian_chroot:+($debian_chroot)}%F{141}%m%F{181}$(git_prompt)%f %F{red}>%F{228}>%F{green}>%f '
+          PROMPT=$'${debian_chroot:+($debian_chroot)}%F{141}%B$(prompt_capital_host)%F{181}$(git_prompt)%f %F{red}>%F{228}>%F{green}>%f%b '
     esac
     unset prompt_symbol
 }
@@ -273,4 +277,6 @@ fi
 if [ -f /etc/zsh_command_not_found ]; then
     . /etc/zsh_command_not_found
 fi
+
+test -r $HOME/.zprofile && . $HOME/.zprofile
 

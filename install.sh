@@ -1,12 +1,17 @@
 #!/bin/bash
 
 setup-devtools () {
+  # Shell
+  sudo apt -y install zsh
+
   # editor
-  sudo apt -y install vim
+  # sudo apt -y install vim
 
   # version control
   sudo apt -y install git
 
+  # terminal
+  sudo apt -y install tmux
   # Secure Shell
   sudo apt -y install ssh
 
@@ -33,10 +38,12 @@ fi
 # dotfile dir
 echo $(cd $(dirname $BASH_SOURCE); pwd) > $HOME/.local/.dotfiles
 
-# setup vim-plug
-curl -fLo $HOME/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-echo | vim +PlugInstall +qall
-echo "[+] Vim plug installed"
+# nvim
+mkdir -p $HOME/.local/opt/nvim
+cd $HOME/.local/opt/nvim
+curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz > nvim-linux64.tar.gz
+tar zxf nvim-linux64.tar.gz
+ln -s nvim-linux64 currVer
 
 # zsh plugin setup
 # zsh-syntax-highlighting

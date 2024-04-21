@@ -14,12 +14,18 @@ $ cd dotfiles
 $ ./unlink.sh
 $ ./setup_zsh.sh
 $ ./install.sh
+$ # ./install_dev.sh
 ```
 
 
 ## Change login shell
 
 `chsh -s /bin/zsh`
+
+
+## ssh-keygen
+
+ssh-keygen -t ed25519 -C "email or name"
 
 
 ## Update editor
