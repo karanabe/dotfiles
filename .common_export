@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 # keybind
 # set -o vi
@@ -23,7 +23,7 @@ export PATH="$VOLTA_HOME/bin:$PATH"
 # nodejs/pnpm
 export PNPM_HOME="$HOME/.local/lang/pnpm"
 
-if [ "$ID" == "debian" ]; then
+if [ "$ID" = "debian" ]; then
   # ruby/rbenv
   export RBENV_ROOT="$HOME/.local/lang/rbenv"
   export PATH="$RBENV_ROOT/bin:$PATH"

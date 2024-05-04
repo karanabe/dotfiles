@@ -106,8 +106,10 @@ git_prompt() {
   fi
 }
 
+HOSTNAME=$(hostname)
+
 prompt_capital_host() {
-    echo "%{$(tr '[:lower:]' '[:upper:]' <<< "%m")%}"
+    echo "$(tr '[:lower:]' '[:upper:]' <<< $HOSTNAME)"
 }
 
 configure_prompt() {
