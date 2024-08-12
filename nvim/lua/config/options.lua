@@ -18,7 +18,7 @@ opt.cursorline = true
 opt.expandtab = true
 opt.grepprg = "rg --vimgrep -g '!.git/' -g '!node_modules/'"
 opt.shiftround = true -- Round indent
-opt.shiftwidth = 2 -- Size of an indent
-opt.tabstop = 3 -- Number of spaces tabs count for
+opt.shiftwidth = 4 -- Size of an indent
+opt.tabstop = 4 -- Number of spaces tabs count for
 
 vim.api.nvim_set_option('scrolloff', 4)
