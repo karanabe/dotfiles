@@ -1,16 +1,26 @@
 
 
-# Commit Message Header should be kept within 50  | 50 characters
-# Wrap the body at 72 characters                                        | 72 characters
+# ──────────────── 50 characters ────────────────┤
+# Commit Message Header should be kept within 50
+# ───────────────────────────── 72 chars ──────────────────────────────┤
+# Wrap the body at 72 characters
 
 # Header
 # <type>(<scope>): <short summary>
+#   │       │             │
+#   │       │             └─⫸ Summary in present tense.
+#   │       │                  No period at the end.  Not capitalized.
+#   │       │
+#   │       └─⫸ Commit Scope: Depends on project. (Option)
+#   │
+#   └─⫸ Commit Type: build|ci|docs|feat|fix|
+#                     perf|refactor|study|test|misc
 
-# Commit Type: build | ci | docs | feat | fix | perf | refactor | study | test
 # build: Changes that affect the build system or external dependencies
 # ci: Change to CI configuration files and scripts
 # docs: Documentation only changes
 # feat: A new feature
+# fix: A bug fix
 # perf: A code change that improves performance
 # refactor: A code chagne that neither fixes a bug nor adds a feature
 # study: A code add or change by study (examples: atcoder code)

@@ -81,7 +81,7 @@ return {
         symlink_destination = true,
       },
       filters = {
-        dotfiles = true,
+        dotfiles = false,
       },
       actions = {
         expand_all = {

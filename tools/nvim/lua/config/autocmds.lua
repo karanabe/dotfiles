@@ -53,3 +53,11 @@ vim.cmd([[autocmd BufRead,BufNewFile * nested if @% == '\.' | set filetype=bash 
 vim.cmd([[autocmd BufRead,BufNewFile * nested if @% !~ '\.' && getline(1) == '^#!.*python.*' | set filetype=python | endif]])
 vim.cmd([[autocmd BufRead,BufNewFile * nested if @% !~ '\.' && getline(1) == '^#!.*ruby.*' | set filetype=ruby | endif]])
 vim.cmd([[autocmd BufRead,BufNewFile * nested if @% !~ '\.' && getline(1) == '^#!/bin/zsh.*' | set filetype=bash | endif]])
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "markdown" },
+    callback = function()
+        vim.opt_local.spell = false
+    end,
+})
+

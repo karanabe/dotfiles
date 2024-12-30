@@ -1,3 +1,1 @@
-export PYENV_ROOT="$HOME/.pyenv
-eval "$(pyenv init -)
-
+After install uv file stored in $HOME/.local/bin

@@ -81,6 +81,7 @@ alias gpfm="git push -f origin master"
 alias gco="git checkout"
 gpta() { git reset --hard HEAD^ && git am --3way ./patch/$@; }
 alias gsign="gitsign"
+alias proot='cd $(git rev-parse --show-toplevel)'
 
 # gpg
 ## Expire
@@ -103,9 +104,10 @@ gprm() { rm ~/.gnupg/private-keys-v1.d/$1.key; }
 alias sshgen="ssh-keygen -t ed25519 -C"
 
 # python3
-alias venv='source $HOME/.local/usr/pydev/dev/bin/activate'
-alias von=". bin/activate"
+alias venv='source $HOME/.local/usr/venv/dev/bin/activate'
+alias von="source .venv/bin/activate"
 alias voff='deactivate'
+alias pip="uv pip"
 
 # python2
 alias venv2='source $HOME/.local/usr/pydev/dev2/bin/activate'

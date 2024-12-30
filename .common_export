@@ -30,11 +30,10 @@ if [ "$ID" = "debian" ]; then
   eval "$(rbenv init -)"
 fi
 
-# python/pyenv
-export PYENV_ROOT="$HOME/.local/lang/pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-source $HOME/.local/usr/pydev/dev/bin/activate
+# python/uv
+export UV_PYTHON_INSTALL_DIR="$HOME/.local/lang/uv"
+export UV_TOOL_DIR="$HOME/.local/lang/uv/tools"
+source $HOME/.local/usr/venv/dev/bin/activate
 
 # rust
 export CARGO_HOME="$HOME/.local/lang/cargo"
@@ -54,6 +53,9 @@ export PKG_CONFIG_ALLOW_CROOSS=1
 
 # gpg git
 export GPG_TTY=$(tty)
+
+# gtk4-rs
+export PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig:$PKG_CONFIG_PATH
 
 # k8s
 export KUBECONFIG=$HOME/.kube/config

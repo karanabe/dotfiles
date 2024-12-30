@@ -14,6 +14,7 @@ mkdir -p $HOME/.local/usr
 mkdir -p $HOME/.local/etc
 mkdir -p $HOME/.local/opt
 mkdir -p $HOME/.local/var
+mkdir -p $HOME/.local/share
 mkdir -p $HOME/.visualarts/.ssh
 mkdir -p $HOME/.visualarts/.gnupg
 
@@ -43,7 +44,8 @@ ln -s $FILE_DIR/.gitconfig $HOME/.gitconfig
 ln -s $FILE_DIR/.gitmessage $HOME/.gitmessage
 #ln -s $FILE_DIR/.vimrc $HOME/.vimrc
 ln -s $FILE_DIR/.tmux.conf $HOME/.tmux.conf
-ln -s $FILE_DIR/nvim $HOME/.config/nvim
 # ln -s $HOME/.local/share/vimplug $HOME/.vim
 ln -s $HOME/.visualarts/.gnupg $HOME/.gnupg
 ln -s $HOME/.visualarts/.ssh $HOME/.ssh
+ln -s $FILE_DIR/tools/nvim $HOME/.config/nvim
+ln -s $FILE_DIR/tools/uv uv

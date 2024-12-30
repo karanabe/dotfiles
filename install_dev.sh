@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo apt install -y build-essential
+sudo apt install -y build-essential dnsutils
 
 # Install rust-analyzer
 # https://rust-analyzer.github.io/manual.html#rust-analyzer-language-server-binary

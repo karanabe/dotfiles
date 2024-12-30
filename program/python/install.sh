@@ -1,7 +1,7 @@
 #!/bin/bash
 
-rm -rf $HOME/.local/lang/pyenv
-git clone https://github.com/pyenv/pyenv.git $HOME/.local/lang/pyenv
+curl -LsSf https://astral.sh/uv/install.sh | sh
+mkdir -p $HOME/.local/lang/uv/tools
 
 # for build python
 sudo apt -y install build-essential gdb lcov pkg-config \
