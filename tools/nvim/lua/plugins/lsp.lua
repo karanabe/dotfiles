@@ -67,6 +67,19 @@ return {
             },
           },
         },
+        rust_analyzer = {
+          settings = {
+            ["rust-analyzer"] = {
+              cargo = {
+                loadOutDirsFromCheck = true,
+              },
+              procMacro = { enable = true },
+              hoverActions = {
+                enable = true,
+              },
+            },
+          },          
+        }
       },
       -- you can do any additional lsp server setup here
       -- return true if you don't want this server to be setup with lspconfig
