@@ -1,4 +1,7 @@
 {
   "cspell.language": "en,ja",
-  "cspell.enabledLanguageIds": ["markdown", "plaintext", "javascript", "python"]
+  "cspell.enabledLanguageIds": ["markdown", "plaintext", "javascript", "python", "rust"],
+  "rust-analyzer.inlayHints.typeHints.enable": true,
+  "rust-analyzer.inlayHints.parameterHints.enable": true,
+  "rust-analyzer.inlayHints.chainingHints.enable": true
 }

@@ -28,3 +28,6 @@ vim.api.nvim_set_option('scrolloff', 4)
 vim.g.lazyvim_python_lsp = "pyright"
 -- Set to "ruff_lsp" to use the old LSP implementation version.
 vim.g.lazyvim_python_ruff = "ruff"
+-- LSP Server to use for Rust.
+vim.g.lazyvim_rust_diagnostics = "rust-analyzer"
+
