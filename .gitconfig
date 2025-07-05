@@ -31,13 +31,24 @@
 
 [core]
   editor = nvim
+  pager = delta
 
 [color]
   ui = auto
 
+[delta]
+  navigate = true
+  dark = true
+
+[interactive]
+  diffFilter = delta --color-only
+
 [commit]
   gpgsign = true
   template = ~/.gitmessage
+
+[merge]
+  conflictstyle = zdiff3
 
 [tag]
   gpgSign = true

@@ -62,7 +62,7 @@ alias tarxz="tar Jxf"
 alias targz="tar zxf"
 
 # git
-alias gitinit="git commit --allow-empty -m 'Init commit'"
+alias gitinit="git commit --allow-empty -m 'initial commit'"
 gitupstream() { git remote add upstream $1; }
 gitupfetch() {
 	git fetch upstream

@@ -12,5 +12,12 @@ sudo apt update && sudo apt -y upgrade
 cd $DOTFILES
 git pull
 
+# Update zsh plugins
+cd $HOME/.local/share/zsh-syntax-highlighting
+git pull
+
+cd $HOME/.local/share/zsh-autosuggestions
+git pull
+
 cd $CURRENT_DIR
 echo "[+] Done. Update your computer. Have fun!!"
