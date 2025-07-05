@@ -48,4 +48,3 @@ ln -s $FILE_DIR/.tmux.conf $HOME/.tmux.conf
 ln -s $HOME/.visualarts/.gnupg $HOME/.gnupg
 ln -s $HOME/.visualarts/.ssh $HOME/.ssh
 ln -s $FILE_DIR/tools/nvim $HOME/.config/nvim
-ln -s $FILE_DIR/tools/uv uv

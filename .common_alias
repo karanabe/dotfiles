@@ -4,7 +4,7 @@ alias dotup="$(cat $HOME/.local/.dotfiles)/update.sh && . $HOME/.bash_profile"
 
 # global
 alias sudo='sudo '
-alias dotfiles='cd $HOME/project/code/dotfiles'
+alias dotfiles='cd $(cat $HOME/.local/.dotfiles)'
 alias lstat="stat --format='%a %A %10U %10G %20F %n' ./* .*"
 alias lstats="stat --printf='%a %A %10U %10G %20F %n\n'"
 alias lgrep="stat --format='%a %A %10U %10G %20F %n' ./* .* | grep"
