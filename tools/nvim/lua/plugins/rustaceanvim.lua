@@ -1,3 +1,5 @@
+local diagnostics = vim.g.lazyvim_rust_diagnostics or "rust-analyzer"
+
 return {
   {
     "mrcjkb/rustaceanvim",
@@ -75,5 +77,5 @@ return {
         )
       end
     end,
-  }
+  },
 }

@@ -1,3 +1,5 @@
+local diagnostics = vim.g.lazyvim_rust_diagnostics or "rust-analyzer"
+
 return {
   {
     "williamboman/mason.nvim",
@@ -9,5 +11,5 @@ return {
         vim.list_extend(opts.ensure_installed, { "bacon" })
       end
     end,
-  }
+  },
 }
