@@ -2,6 +2,7 @@ return {
   -- change some telescope options and a keymap to browse plugin files
   {
     "nvim-telescope/telescope.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
     keys = {
       -- add a keymap to browse plugin files
       -- stylua: ignore
@@ -67,6 +68,22 @@ return {
     'fannheyward/telescope-coc.nvim',
     config = function ()
       require('telescope').load_extension("coc")
+    end,
+  },
+
+  -- add telescope-luasnip
+  {
+    "benfowler/telescope-luasnip.nvim",
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
+      "L3MON4D3/LuaSnip",
+    },
+    config = function()
+      require("telescope").load_extension("luasnip")
+
+      vim.keymap.set("n", "<leader><leader>ls", function()
+        require("telescope").extensions.luasnip.luasnip()
+      end, { desc = "List LuaSnip snippets" })
     end,
   },
 }
