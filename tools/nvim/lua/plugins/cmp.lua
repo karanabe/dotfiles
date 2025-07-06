@@ -8,7 +8,9 @@ return {
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
       "onsails/lspkind.nvim",
-      "hrsh7th/vim-vsnip",
+      "L3MON4D3/LuaSnip",
+      "saadparwaiz1/cmp_luasnip",
+      "rafamadriz/friendly-snippets",
     },
     opts = function()
       vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
@@ -19,7 +21,7 @@ return {
       return {
         snippet = {
           expand = function(args)
-            vim.fn["vsnip#anonymous"](args.body)
+            luasnip.lsp_expand(args.body)
           end,
         },
         completion = {
@@ -77,9 +79,10 @@ return {
         }),
         sources = cmp.config.sources({
           { name = "nvim_lsp" },
-          { name = "buffer" },
+          { name = "luasnip" },
           { name = "path" },
-          { name = "luasnip", priority_weight = 20 },
+        }, {
+          { name = "buffer" },
         }),
         formatting = {
           format = lspkind.cmp_format({
