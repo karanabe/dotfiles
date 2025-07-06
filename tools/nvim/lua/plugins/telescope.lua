@@ -17,7 +17,7 @@ return {
       },
       {
         "<leader>fg",
-        function() require("telescope.builtin").live_grep() end,
+        "<cmd>Telescope live_grep<cr>",
         desc = "Find File from Words",
       },
       {
@@ -30,7 +30,6 @@ return {
         function() require("telescope.builtin").help_tags() end,
         desc = "Find Help Tags",
       }
-      
     },
     -- change some options
     opts = {
