@@ -283,3 +283,7 @@ fi
 
 #test -r $HOME/.zprofile && . $HOME/.zprofile
 
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.local/lang/sdkman"
+[[ -s "$HOME/.local/lang/sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.local/lang/sdkman/bin/sdkman-init.sh"
