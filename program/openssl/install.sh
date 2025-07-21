@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export OPENSSL_VERSION=3.3.0
+export OPENSSL_VERSION=3.5.1
 
 if [ "$UID" -ne 0 ]; then
   echo "[FAIL] Please run as root"
