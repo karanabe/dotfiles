@@ -3,35 +3,44 @@ return {
   {
     "nvim-telescope/telescope.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
-    keys = {
-      -- add a keymap to browse plugin files
-      -- stylua: ignore
-      {
-        "<leader>fp",
-        function() require("telescope.builtin").find_files({ cwd = require("lazy.core.config").options.root }) end,
-        desc = "Find Plugin File",
-      },
-      {
-        "<leader>ff",
-        function() require("telescope.builtin").find_files() end,
-        desc = "Find Srouce File",
-      },
-      {
-        "<leader>fg",
-        "<cmd>Telescope live_grep<cr>",
-        desc = "Find File from Words",
-      },
-      {
-        "<leader>fb",
-        function() require("telescope.builtin").buffer() end,
-        desc = "Find File from Buffer",
-      },
-      {
-        "<leader>fh",
-        function() require("telescope.builtin").help_tags() end,
-        desc = "Find Help Tags",
-      }
-    },
+    keys = function(_, keys)
+      -- remove LazyVim's default <leader>fg -> git_files mapping
+      for i = #keys, 1, -1 do
+        if keys[i][1] == "<leader>fg" then
+          table.remove(keys, i)
+        end
+      end
+       vim.list_extend(keys, {
+        {
+          "<leader>fp",
+          function()
+            require("telescope.builtin").find_files({ cwd = require("lazy.core.config").options.root })
+          end,
+          desc = "Find Plugin File",
+        },
+        {
+          "<leader>ff",
+          function() require("telescope.builtin").find_files() end,
+          desc = "Find Source File",
+        },
+        {
+          "<leader>fg",
+          function() require("telescope.builtin").live_grep() end,
+          desc = "Live Grep",
+        },
+        {
+          "<leader>fb",
+          function() require("telescope.builtin").buffers() end,
+          desc = "Find File from Buffer",
+        },
+        {
+          "<leader>fh",
+          function() require("telescope.builtin").help_tags() end,
+          desc = "Find Help Tags",
+        },
+      })
+       return keys
+    end,
     -- change some options
     opts = {
       defaults = {
