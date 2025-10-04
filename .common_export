@@ -14,6 +14,10 @@ export PATH=$HOME/package/dotfiles/.local/bin:$PATH
 export PATH=$HOME/project/code/rust/scripts/target/x86_64-unknown-linux-musl/release:$PATH
 export PATH=$HOME/.local/opt/nvim/currVer/bin:$PATH
 
+# database
+export ORACLE_HOME="$HOME/package/oracle/instantclient_23_8"
+export LD_LIBRARY_PATH=$ORACLE_HOME:$LD_LIBRARY_PATH
+
 # lang
 #
 # nodejs/volta
