@@ -2,6 +2,13 @@ return {
   -- add more treesitter parsers
   {
     'nvim-treesitter/nvim-treesitter',
+    branch = 'main',
+    dependencies = {
+      {
+        'nvim-treesitter/nvim-treesitter-textobjects',
+        branch = 'main',
+      },
+    },
     opts = function(_, opts)
       opts.ensure_installed = type(opts.ensure_installed) == 'table' and opts.ensure_installed or {}
 
