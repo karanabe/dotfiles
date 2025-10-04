@@ -4,6 +4,10 @@ return {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
     opts = function(_, opts)
+      opts.options = opts.options or {}
+      opts.options.theme = "catppuccin"
+      opts.sections = opts.sections or {}
+      opts.sections.lualine_x = opts.sections.lualine_x or {}
       table.insert(opts.sections.lualine_x, "😄")
     end,
   },
@@ -14,7 +18,9 @@ return {
     event = "VeryLazy",
     opts = function()
       return {
-        --[[add your custom lualine config here]]
+        options = {
+          theme = "catppuccin",
+        },
       }
     end,
   },
