@@ -42,14 +42,15 @@
 - `<leader>rc` → コードアクション。【F:tools/nvim/lua/config/keymaps.lua†L58-L63】
 
 ### ファイルツリー (nvim-tree)
-- `<C-n>` → NvimTree の表示切替。【F:tools/nvim/lua/plugins/tree.lua†L117-L119】
+- `<leader>fe`, `<leader>fE`, `<leader>e` → LazyVimのNeo-tree用マッピングを無効化。【F:tools/nvim/lua/plugins/tree.lua†L121-L123】
+- `<C-n>` → NvimTree の表示切替。【F:tools/nvim/lua/plugins/tree.lua†L124-L131】
 - `v` (NvimTree バッファ内) → 縦分割で開く。【F:tools/nvim/lua/plugins/tree.lua†L18-L24】
 - `<S-k>` (NvimTree バッファ内) → 新規タブで開く。【F:tools/nvim/lua/plugins/tree.lua†L18-L24】
 
 ## オープンなキーの整理
 
 ### Normal モードで未使用の Ctrl 系
-現在のカスタム設定で Ctrl 修飾が割り当てられているのは `<C-h>`, `<C-j>`, `<C-k>`, `<C-l>`, `<C-Up>`, `<C-Down>`, `<C-Left>`, `<C-Right>`, `<C-n>` のみです。【F:tools/nvim/lua/config/keymaps.lua†L20-L30】【F:tools/nvim/lua/plugins/tree.lua†L117-L119】
+現在のカスタム設定で Ctrl 修飾が割り当てられているのは `<C-h>`, `<C-j>`, `<C-k>`, `<C-l>`, `<C-Up>`, `<C-Down>`, `<C-Left>`, `<C-Right>`, `<C-n>` のみです。【F:tools/nvim/lua/config/keymaps.lua†L20-L30】【F:tools/nvim/lua/plugins/tree.lua†L125-L131】
 Neovim 既定のマッピングが `<C-a>` や `<C-b>` などほとんどのアルファベットと結びついているため、デフォルト動作を保持する方針であれば新たに割り当て可能な `<C-*>` との組み合わせは確認できません。カスタム設定で利用したい場合は、既定機能を上書きすることを前提に個別検討してください。
 
 ### Normal モードで未使用の Shift 系

@@ -7,6 +7,8 @@ return {
   },
 
   config = function()
+    vim.g.nvim_tree_side = "right"
+
     require("nvim-tree").setup({
       on_attach = function(bufnr)
         local api = require "nvim-tree.api"
@@ -27,9 +29,9 @@ return {
         sorter = "case_sensitive",
       },
       view = {
-        width = '20%',
-        side = 'right',
-        signcolumn = 'no',
+        width = 40,
+        side = "right",
+        signcolumn = "no",
       },
       renderer = {
         add_trailing = false,
@@ -116,6 +118,17 @@ return {
     })
   end,
   keys = {
-    { mode = "n", "<C-n>", "<cmd>NvimTreeToggle<CR>", { noremap = true, silent = true, nowait = true} }
-  }
+    { "<leader>fe", false, mode = "n" },
+    { "<leader>fE", false, mode = "n" },
+    { "<leader>e", false, mode = "n" },
+    {
+      "<C-n>",
+      "<cmd>NvimTreeToggle<CR>",
+      mode = "n",
+      noremap = true,
+      silent = true,
+      nowait = true,
+      desc = "Toggle NvimTree",
+    },
+  },
 }
