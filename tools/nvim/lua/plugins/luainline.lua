@@ -5,7 +5,7 @@ return {
     event = "VeryLazy",
     opts = function(_, opts)
       opts.options = opts.options or {}
-      opts.options.theme = "catppuccin"
+      opts.options.theme = "tokyonight"
       opts.sections = opts.sections or {}
       opts.sections.lualine_x = opts.sections.lualine_x or {}
       table.insert(opts.sections.lualine_x, "😄")
@@ -19,7 +19,7 @@ return {
     opts = function()
       return {
         options = {
-          theme = "catppuccin",
+          theme = "tokyonight",
         },
       }
     end,
