@@ -28,6 +28,7 @@ return {
       },
       view = {
         width = '20%',
+        side = 'right',
         signcolumn = 'no',
       },
       renderer = {
