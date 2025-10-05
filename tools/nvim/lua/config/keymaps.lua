@@ -96,3 +96,5 @@ local function open_call_hierarchy()
 end
 
 mapset("n", "gH", open_call_hierarchy, { desc = "Call Hierarchy" })
+
+mapset("n", "K", vim.lsp.buf.hover, { desc = "LSP Hover" })
