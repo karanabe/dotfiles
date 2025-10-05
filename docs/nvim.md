@@ -51,11 +51,15 @@
 
 ### Normal モードで未使用の Ctrl 系
 現在のカスタム設定で Ctrl 修飾が割り当てられているのは `<C-h>`, `<C-j>`, `<C-k>`, `<C-l>`, `<C-Up>`, `<C-Down>`, `<C-Left>`, `<C-Right>`, `<C-n>` のみです。【F:tools/nvim/lua/config/keymaps.lua†L20-L30】【F:tools/nvim/lua/plugins/tree.lua†L125-L131】
+さらに tmux 側でも `<prefix> + C-h/j/k/l` にペインリサイズを割り当てているため、端末全体で Ctrl + 方向キー系は占有済みとみなし追加割り当ては控えています。【F:.tmux.conf†L99-L102】
 Neovim 既定のマッピングが `<C-a>` や `<C-b>` などほとんどのアルファベットと結びついているため、デフォルト動作を保持する方針であれば新たに割り当て可能な `<C-*>` との組み合わせは確認できません。カスタム設定で利用したい場合は、既定機能を上書きすることを前提に個別検討してください。
 
 ### Normal モードで未使用の Shift 系
 グローバルに定義されている Shift 修飾は `<S-h>` と `<S-l>` のみで、NvimTree バッファ内で `<S-k>` が利用されています。【F:tools/nvim/lua/config/keymaps.lua†L35-L37】【F:tools/nvim/lua/plugins/tree.lua†L18-L24】
 Neovim 既定では大文字コマンドとして多くの `<S-*>` が機能しているため、本設定で追加していない組み合わせも「空き」とはみなしていません。追加する場合は既存の動作を置き換える前提で検討してください。
+
+### Normal モードで未使用の単独キー
+現在カスタムで単独キーを再定義しているのはウィンドウ削除用の `q` のみで、その他のアルファベットは既定動作を維持しています。【F:tools/nvim/lua/config/keymaps.lua†L50-L53】
 
 ### Leader プレフィックスの空き
 リーダーキー直後では以下が使用済みです: `<leader><space>`, `<leader>bb`, `<leader>\``, `<leader>t[f/l/c/d/h]`, `<leader>w[w/d/-/|]`, `<leader>-`, `<leader>|`, `<leader>r[t/r/e/d/c]`, `<leader>f[p/f/g/b/h]`, `<leader><leader>ls`。【F:tools/nvim/lua/config/keymaps.lua†L13-L63】【F:tools/nvim/lua/plugins/telescope.lua†L13-L39】【F:tools/nvim/lua/plugins/telescope.lua†L83-L96】
