@@ -80,3 +80,19 @@ end
 -- mapset("n", ";", "<cmd>lua InsertEndSemicolon()<cr>", { noremap = true, silent = true })
 mapset("i", ";;", "<cmd>lua InsertEndSemicolon()<cr>", { noremap = true, silent = true })
 mapset("i", ";j", "<cmd>lua InsertEndSemicolon()<cr><ESC>", { noremap = true, silent = true })
+
+local function open_call_hierarchy()
+  local ok, telescope = pcall(require, "telescope.builtin")
+  local lsp = vim.lsp.buf
+  local items = {
+    { label = "Incoming Calls", action = ok and telescope.lsp_incoming_calls or lsp.incoming_calls },
+    { label = "Outgoing Calls", action = ok and telescope.lsp_outgoing_calls or lsp.outgoing_calls },
+  }
+  vim.ui.select(items, { prompt = "Call Hierarchy" }, function(choice)
+    if choice then
+      choice.action()
+    end
+  end)
+end
+
+mapset("n", "gH", open_call_hierarchy, { desc = "Call Hierarchy" })
