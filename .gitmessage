@@ -1,74 +1,77 @@
-
-
-# ──────────────── 50 characters ────────────────┤
-# Commit Message Header should be kept within 50
-# ───────────────────────────── 72 chars ──────────────────────────────┤
-# Wrap the body at 72 characters
+# ---------------- 50 characters ----------------|
+# Use the header budget: target 45-50 characters including <area>: .
+# ------------------------- 72 characters -------------------------|
+# Wrap the body and footer at 72 characters.
 
 # Header
-# <type>(<scope>): <short summary>
-#   │       │             │
-#   │       │             └─⫸ Summary in present tense.
-#   │       │                  No period at the end.  Not capitalized.
-#   │       │
-#   │       └─⫸ Commit Scope: Depends on project. (Option)
-#   │
-#   └─⫸ Commit Type: build|ci|docs|feat|fix|
-#                     perf|refactor|study|test|misc
+# <area>: <action> <specific summary>
+#
+# area: required noun for the affected module, configuration area, or
+#       repository area.
+#       examples: nvim, shell, git, tmux, vscode, docker, rust, nodejs,
+#                 python, link, docs, repo
+# action: clear change word after the colon.
+#         examples: fix, feat, add, update, remove, refactor, test, docs
+#
+# Examples:
+# git: update message template for commit guidance
+# shell: add alias for project navigation
+#
+# Summary:
+# - target 45-50 characters for the full header, including "<area>: "
+# - revise headers under 40 characters unless the change is tiny or
+#   mechanical
+# - make the concrete change understandable from the header alone
+# - name the changed behavior, guidance, file role, or review impact
+# - use imperative present tense: "change", not "changed" or "changes"
+# - do not capitalize the first letter
+# - no period at the end
 
-# build: Changes that affect the build system or external dependencies
-# ci: Change to CI configuration files and scripts
-# docs: Documentation only changes
-# feat: A new feature
-# fix: A bug fix
-# perf: A code change that improves performance
-# refactor: A code chagne that neither fixes a bug nor adds a feature
-# study: A code add or change by study (examples: atcoder code)
-# test: Adding missing tests or correcting existing tests
-# misc: No reason, this is worse case
+# Common actions
+# build: change build systems or external dependencies
+# chore: make maintenance changes that do not fit another action
+# ci: change CI configuration files and scripts
+# docs: change documentation only
+# feat: add a new feature
+# fix: fix a bug
+# perf: improve performance
+# refactor: change code without fixing a bug or adding a feature
+# remove: remove behavior, files, dependencies, or guidance
+# revert: revert a previous commit
+# style: change formatting, whitespace, or other non-meaningful style
+# test: add missing tests or correct existing tests
+# update: change existing behavior, files, dependencies, or guidance
 
-# Commit Scope: this is option
-# Most of in this case is cargo project
-# monorepo or module
+# Body
+# Write a body by default. Explain why the change is needed and what
+# changed, and any behavior or review impact. Compare old and new
+# behavior when it clarifies impact.
+# Omit the body only for obvious typo, formatting, or mechanical changes
+# where extra explanation would add no review value.
+# Leave one blank line between the header and body. Multiple body
+# paragraphs are allowed.
 
-# Summary
-# Use the summary field to provide a succinct description of the change:
-# - use the imperative, present tense: "change" not "changed" not "changes"
-# - don't capitalize the first letter
-# - no dot (.) at the end
-
-# Commit Message Body
-# Just as in the summary, use the imperative, present tense: "fix" not "fixed" nor "fixes".
-
-# Explain the motivation for the change in the commit message body.
-# This commit message should explain why you are making the change.
-# You can include a comparison of the previous behavior with the new behavior
-# in order to illustrate the impact of the change.
-
-# footer if you have
-# Keywords to close an issue:
-# close, closes, closed
-# fix, fixes, fixed
-# resolve, resolves, resolved
-# Fix #111
-# Close #444
-
-# Commit Message Footer
-# The footer can contain information about breaking changes and deprecations and
-# is also the place to reference GitHub issues, Jira tickets, and other PRs that
-# this commit closes or is related to. For example:
-
-# BREAKING CHANGE: <breaking change summary>
-# <BLANK LINE>
-# <breaking change description + migration instructions>
-# <BLANK LINE>
-# <BLANK LINE>
-# Fixes #<issue number>
-
+# Footer
+# Use footers for issue references, breaking changes, deprecations,
+# reviews, and reverts. Start footers one blank line after the body, or
+# one blank line after the header when there is no body.
+#
+# Fixes #123
+# Closes #123
+# Refs: #123
+# Reviewed-by: Name
+#
+# BREAKING CHANGE: <summary>
+# <description and migration notes>
+# Do not use ! in the header for breaking changes.
+# BREAKING-CHANGE: <summary> is also valid, but prefer BREAKING CHANGE:.
+#
 # DEPRECATED: <what is deprecated>
-# <BLANK LINE>
-# <deprecation description + recommended update path>
-# <BLANK LINE>
-# <BLANK LINE>
-# Closes #<pr number>
+# <recommended update path>
 
+# Revert commits
+# <area>: revert <header of reverted commit>
+#
+# This reverts commit <sha>.
+#
+# Explain why the revert is needed.

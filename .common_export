@@ -15,7 +15,7 @@ export PATH=$HOME/project/code/rust/scripts/target/x86_64-unknown-linux-musl/rel
 export PATH=$HOME/.local/opt/nvim/currVer/bin:$PATH
 
 # database
-export ORACLE_HOME="$HOME/package/oracle/instantclient_23_8"
+export ORACLE_HOME="$HOME/package/oracle/instantclient_23_9"
 export LD_LIBRARY_PATH=$ORACLE_HOME:$LD_LIBRARY_PATH
 
 # lang
@@ -23,10 +23,6 @@ export LD_LIBRARY_PATH=$ORACLE_HOME:$LD_LIBRARY_PATH
 # nodejs/volta
 export VOLTA_HOME="$HOME/.local/lang/volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
-
-# nodejs/pnpm
-export PNPM_HOME="$HOME/.local/lang/pnpm"
-export PATH="$PNPM_HOME:$PATH"
 
 if [ "$ID" = "debian" ]; then
   # ruby/rbenv

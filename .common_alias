@@ -33,6 +33,9 @@ alias dv="docker volume"
 alias dvl="docker volume ls"
 alias dl="docker logs"
 
+# tcpdump
+alias tcpdump="sudo tcpdump"
+
 # ps
 alias psa="ps aux"
 
