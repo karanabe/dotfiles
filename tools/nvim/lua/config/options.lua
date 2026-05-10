@@ -4,6 +4,7 @@
 
 -- Enable LazyVim auto format
 vim.g.autoformat = false
+vim.g.lazyvim_picker = "telescope"
 
 -- LazyVim root dir detection
 -- Each entry can be:
@@ -21,7 +22,7 @@ opt.shiftround = true -- Round indent
 opt.shiftwidth = 4 -- Size of an indent
 opt.tabstop = 4 -- Number of spaces tabs count for
 
-vim.api.nvim_set_option('scrolloff', 4)
+vim.api.nvim_set_option("scrolloff", 4)
 
 -- LSP Server to use for Python.
 -- Set to "basedpyright" to use basedpyright instead of pyright.
@@ -30,4 +31,3 @@ vim.g.lazyvim_python_lsp = "pyright"
 vim.g.lazyvim_python_ruff = "ruff"
 -- LSP Server to use for Rust.
 vim.g.lazyvim_rust_diagnostics = "rust-analyzer"
-

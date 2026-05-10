@@ -42,7 +42,7 @@ mapset("n", "<leader>`", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 mapset("n", "<leader>tl", "<cmd>tablast<cr>", { desc = "Last Tab" })
 mapset("n", "<leader>tf", "<cmd>tabfirst<cr>", { desc = "First Tab" })
 mapset("n", "<leader>tc", "<cmd>tabnew<cr>", { desc = "New Tab" })
-mapset("n", "<leader>tl", "<cmd>tabnext<cr>", { desc = "Next Tab" })
+mapset("n", "<leader>tn", "<cmd>tabnext<cr>", { desc = "Next Tab" })
 mapset("n", "<leader>td", "<cmd>tabclose<cr>", { desc = "Close Tab" })
 mapset("n", "<leader>th", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
 
@@ -94,6 +94,37 @@ local function open_call_hierarchy()
     end
   end)
 end
+
+local function telescope_or_lsp(telescope_name, lsp_name)
+  return function()
+    local ok, telescope = pcall(require, "telescope.builtin")
+    if ok and telescope[telescope_name] then
+      telescope[telescope_name]()
+    else
+      vim.lsp.buf[lsp_name]()
+    end
+  end
+end
+
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = vim.api.nvim_create_augroup("user_lsp_keymaps", { clear = true }),
+  callback = function(event)
+    local opts = function(desc)
+      return { buffer = event.buf, desc = desc }
+    end
+
+    mapset("n", "gd", telescope_or_lsp("lsp_definitions", "definition"), opts("Goto Definition"))
+    mapset("n", "gr", telescope_or_lsp("lsp_references", "references"), opts("References"))
+    mapset("n", "gI", telescope_or_lsp("lsp_implementations", "implementation"), opts("Goto Implementation"))
+    mapset("n", "gy", telescope_or_lsp("lsp_type_definitions", "type_definition"), opts("Goto Type Definition"))
+    mapset("n", "gD", vim.lsp.buf.declaration, opts("Goto Declaration"))
+    mapset("n", "K", vim.lsp.buf.hover, opts("LSP Hover"))
+    mapset("n", "gK", vim.lsp.buf.signature_help, opts("Signature Help"))
+    mapset("n", "gH", open_call_hierarchy, opts("Call Hierarchy"))
+    mapset("n", "<leader>ca", vim.lsp.buf.code_action, opts("Code Action"))
+    mapset("n", "<leader>cr", vim.lsp.buf.rename, opts("Rename"))
+  end,
+})
 
 mapset("n", "gH", open_call_hierarchy, { desc = "Call Hierarchy" })
 

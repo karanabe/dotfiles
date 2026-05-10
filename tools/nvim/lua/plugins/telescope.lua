@@ -1,16 +1,40 @@
 return {
-  -- change some telescope options and a keymap to browse plugin files
   {
     "nvim-telescope/telescope.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
     keys = function(_, keys)
-      -- remove LazyVim's default <leader>fg -> git_files mapping
+      local remove = {
+        ["<leader>fb"] = true,
+        ["<leader>ff"] = true,
+        ["<leader>fg"] = true,
+        ["<leader>fh"] = true,
+        ["<leader>fp"] = true,
+      }
       for i = #keys, 1, -1 do
-        if keys[i][1] == "<leader>fg" then
+        if remove[keys[i][1]] then
           table.remove(keys, i)
         end
       end
-       vim.list_extend(keys, {
+      vim.list_extend(keys, {
+        {
+          "<leader>fb",
+          "<cmd>Telescope buffers sort_mru=true sort_lastused=true ignore_current_buffer=true<cr>",
+          desc = "Buffers",
+        },
+        {
+          "<leader>ff",
+          LazyVim.pick("files"),
+          desc = "Find Files (Root Dir)",
+        },
+        {
+          "<leader>fg",
+          LazyVim.pick("live_grep"),
+          desc = "Live Grep (Root Dir)",
+        },
+        {
+          "<leader>fh",
+          "<cmd>Telescope help_tags<cr>",
+          desc = "Find Help Tags",
+        },
         {
           "<leader>fp",
           function()
@@ -18,32 +42,11 @@ return {
           end,
           desc = "Find Plugin File",
         },
-        {
-          "<leader>ff",
-          function() require("telescope.builtin").find_files() end,
-          desc = "Find Source File",
-        },
-        {
-          "<leader>fg",
-          function() require("telescope.builtin").live_grep() end,
-          desc = "Live Grep",
-        },
-        {
-          "<leader>fb",
-          function() require("telescope.builtin").buffers() end,
-          desc = "Find File from Buffer",
-        },
-        {
-          "<leader>fh",
-          function() require("telescope.builtin").help_tags() end,
-          desc = "Find Help Tags",
-        },
       })
-       return keys
+      return keys
     end,
-    -- change some options
-    opts = {
-      defaults = {
+    opts = function(_, opts)
+      opts.defaults = vim.tbl_deep_extend("force", opts.defaults or {}, {
         layout_strategy = "horizontal",
         layout_config = { prompt_position = "bottom" },
         sorting_strategy = "ascending",
@@ -56,43 +59,27 @@ return {
             ["<C-n>"] = "preview_scrolling_down",
           },
         },
-      },
-    },
-  },
-
-  -- add telescope-fzf-native
-  {
-    "telescope.nvim",
-    dependencies = {
-      "nvim-telescope/telescope-fzf-native.nvim",
-      build = "make",
-      config = function()
-        require("telescope").load_extension("fzf")
-      end,
-    },
-  },
-
-  -- add telescope-coc
-  {
-    'fannheyward/telescope-coc.nvim',
-    config = function ()
-      require('telescope').load_extension("coc")
+      })
     end,
   },
 
-  -- add telescope-luasnip
   {
     "benfowler/telescope-luasnip.nvim",
     dependencies = {
       "nvim-telescope/telescope.nvim",
       "L3MON4D3/LuaSnip",
     },
+    keys = {
+      {
+        "<leader><leader>ls",
+        function()
+          require("telescope").extensions.luasnip.luasnip()
+        end,
+        desc = "List LuaSnip snippets",
+      },
+    },
     config = function()
       require("telescope").load_extension("luasnip")
-
-      vim.keymap.set("n", "<leader><leader>ls", function()
-        require("telescope").extensions.luasnip.luasnip()
-      end, { desc = "List LuaSnip snippets" })
     end,
   },
 }

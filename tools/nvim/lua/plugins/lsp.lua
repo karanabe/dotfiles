@@ -8,7 +8,7 @@ return {
         bacon_ls = {
           enabled = diagnostics == "bacon-ls",
         },
-        rust_analyzer = {},
+        rust_analyzer = { enabled = false },
       },
     },
   },

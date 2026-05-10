@@ -2,62 +2,85 @@
 -- Default autocmds that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
 -- Add any additional autocmds here
 
-local augroup = vim.api.nvim_create_augroup   -- Create/get autocommand group
-local autocmd = vim.api.nvim_create_autocmd   -- Create autocommand
+local augroup = vim.api.nvim_create_augroup
+local autocmd = vim.api.nvim_create_autocmd
 
--- shiftwidth <TAB> or <BS> space count
--- tabstop view for tab \0x09
--- softtabstop <TAB> or <BS> space count (vim original)
--- expandtab or noexpandtab
-
--- Disable line length marker
-augroup('setLineLength', { clear = true })
-autocmd('Filetype', {
-  group = 'setLineLength',
-  pattern = { 'text', 'markdown' },
-  command = 'setlocal cc=0'
+autocmd("FileType", {
+  group = augroup("setLineLength", { clear = true }),
+  pattern = { "text", "markdown" },
+  callback = function()
+    vim.opt_local.colorcolumn = "0"
+  end,
 })
 
--- Set indentation to 2 spaces
-augroup('setIndent2', { clear = true })
-autocmd('Filetype', {
-  group = 'setIndent2',
-  pattern = { 'xml', 'html', 'xhtml', 'css', 'scss', 'javascript', 'typescript',
-    'yaml', 'lua', 'java', 'c', 'cc', 'h', 'ruby', 'bash'
+autocmd("FileType", {
+  group = augroup("setIndent2", { clear = true }),
+  pattern = {
+    "xml",
+    "html",
+    "xhtml",
+    "css",
+    "scss",
+    "javascript",
+    "typescript",
+    "javascriptreact",
+    "typescriptreact",
+    "yaml",
+    "lua",
+    "java",
+    "c",
+    "cpp",
+    "ruby",
+    "bash",
   },
-  command = 'setlocal shiftwidth=2 tabstop=2'
+  callback = function()
+    vim.opt_local.shiftwidth = 2
+    vim.opt_local.tabstop = 2
+  end,
 })
 
--- Set indentation to 4 spaces
-augroup('setIndent4', { clear = true })
-autocmd('Filetype', {
-  group = 'setIndent4',
-  pattern = { 'python', 'rust' },
-  command = 'setlocal shiftwidth=4 tabstop=4'
+autocmd("FileType", {
+  group = augroup("setIndent4", { clear = true }),
+  pattern = { "python", "rust" },
+  callback = function()
+    vim.opt_local.shiftwidth = 4
+    vim.opt_local.tabstop = 4
+  end,
 })
 
--- Set indentation to tab
-augroup('setIndentTab', { clear = true })
-autocmd('Filetype', {
-  group = 'setIndentTab',
-  pattern = { 'go', 'make' },
-  command = 'setlocal noexpandtab shiftwidth=4 abstop=4'
+autocmd("FileType", {
+  group = augroup("setIndentTab", { clear = true }),
+  pattern = { "go", "make" },
+  callback = function()
+    vim.opt_local.expandtab = false
+    vim.opt_local.shiftwidth = 4
+    vim.opt_local.tabstop = 4
+  end,
 })
 
+autocmd({ "BufRead", "BufNewFile" }, {
+  group = augroup("setShebangFiletype", { clear = true }),
+  pattern = "*",
+  callback = function(args)
+    if vim.bo[args.buf].filetype ~= "" then
+      return
+    end
 
-vim.cmd([[autocmd BufNewFile,BufRead *.jsx setlocal shiftwidth=2 tabstop=2]])
-vim.cmd([[autocmd BufNewFile,BufRead *.tsx setlocal shiftwidth=2 tabstop=2]])
-
-vim.cmd([[autocmd BufRead,BufNewFile * nested if @% !~ '\.' && getline(1) == '^#!/bin/bash.*' | set filetype=bash | endif]])
-vim.cmd([[autocmd BufRead,BufNewFile * nested if @% == '\.' | set filetype=bash | endif]])
-vim.cmd([[autocmd BufRead,BufNewFile * nested if @% !~ '\.' && getline(1) == '^#!.*python.*' | set filetype=python | endif]])
-vim.cmd([[autocmd BufRead,BufNewFile * nested if @% !~ '\.' && getline(1) == '^#!.*ruby.*' | set filetype=ruby | endif]])
-vim.cmd([[autocmd BufRead,BufNewFile * nested if @% !~ '\.' && getline(1) == '^#!/bin/zsh.*' | set filetype=bash | endif]])
-
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "markdown" },
-    callback = function()
-        vim.opt_local.spell = false
-    end,
+    local first_line = vim.api.nvim_buf_get_lines(args.buf, 0, 1, false)[1] or ""
+    if first_line:match("^#!.*%f[%w]bash%f[%W]") or first_line:match("^#!.*%f[%w]zsh%f[%W]") then
+      vim.bo[args.buf].filetype = "bash"
+    elseif first_line:match("^#!.*%f[%w]python[%w%.]*%f[%W]") then
+      vim.bo[args.buf].filetype = "python"
+    elseif first_line:match("^#!.*%f[%w]ruby%f[%W]") then
+      vim.bo[args.buf].filetype = "ruby"
+    end
+  end,
 })
 
+autocmd("FileType", {
+  group = augroup("markdownSpell", { clear = true }),
+  pattern = { "markdown" },
+  callback = function()
+    vim.opt_local.spell = false
+  end,
+})
