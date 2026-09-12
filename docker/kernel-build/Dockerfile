@@ -1,9 +1,9 @@
 FROM ubuntu:20.04
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Metadata params
-ARG USER
-ARG GROUP
+ARG HOST_UID=1000
+ARG HOST_GID=1000
 
 # User config
 ARG USERNAME=kb
@@ -12,7 +12,6 @@ ARG HOMEDIR=/home/kb
 ARG USERSHELL=/bin/bash
 
 RUN apt-get update -y \
-    && apt-get upgrade -y \
     && yes '' | apt-get -y -o DPkg::options::="--force-confdef" \
       -o DPkg::options::="--force-confold" install -y \
       git \
@@ -30,8 +29,8 @@ RUN apt-get update -y \
 ENV TZ='Asia/Tokyo'
 
 # Setup kernel build user
-RUN addgroup --gid $GROUP $GROUPNAME && \
-    adduser --home $HOMEDIR --shell $USERSHELL --uid $USER --disabled-password --disabled-login --gid $GROUP $USERNAME
+RUN addgroup --gid "$HOST_GID" "$GROUPNAME" && \
+    adduser --home "$HOMEDIR" --shell "$USERSHELL" --uid "$HOST_UID" --disabled-password --disabled-login --gid "$HOST_GID" "$USERNAME"
 
 USER kb:kb
 SHELL ["/bin/bash", "-c"]

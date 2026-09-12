@@ -1,12 +1,34 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+if (( $# != 1 )) || [[ -z "$1" || "$1" == */* ]]; then
+  printf 'usage: %s <patch-file-name>\n' "${0##*/}" >&2
+  exit 2
+fi
 
 PATCH_FILE_NAME=$1
-SPLIT_FILE_NAME=(${PATCH_FILE_NAME//./ })
-PATCH_SIGNED_FILE_NAME="${SPLIT_FILE_NAME[0]}-signed.${SPLIT_FILE_NAME[1]}"
+REPOSITORY_ROOT=$(git rev-parse --show-toplevel)
+PATCH_DIRECTORY="$REPOSITORY_ROOT/patch"
+PATCH_FILE="$PATCH_DIRECTORY/$PATCH_FILE_NAME"
 
-git am --3way ./patch/${PATCH_FILE_NAME}
+if [[ ! -f "$PATCH_FILE" ]]; then
+  printf 'patch not found: %s\n' "$PATCH_FILE" >&2
+  exit 1
+fi
+
+if [[ "$PATCH_FILE_NAME" == *.* ]]; then
+  PATCH_SIGNED_FILE_NAME="${PATCH_FILE_NAME%.*}-signed.${PATCH_FILE_NAME##*.}"
+else
+  PATCH_SIGNED_FILE_NAME="$PATCH_FILE_NAME-signed"
+fi
+PATCH_SIGNED_FILE="$PATCH_DIRECTORY/$PATCH_SIGNED_FILE_NAME"
+TEMPORARY_FILE=$(mktemp "$PATCH_DIRECTORY/.gitsign.XXXXXX")
+trap 'rm -f -- "$TEMPORARY_FILE"' EXIT
+
+git am --3way "$PATCH_FILE"
 git interpret-trailers \
   --trailer "author: $(git log --pretty='%an <%ae>' -1)" \
   --trailer "sign: $(git config user.name) <$(git config user.email)>" \
-  ./patch/${PATCH_FILE_NAME} > \
-  ./patch/${PATCH_SIGNED_FILE_NAME}
+  "$PATCH_FILE" >"$TEMPORARY_FILE"
+mv -- "$TEMPORARY_FILE" "$PATCH_SIGNED_FILE"
+printf 'signed patch written to %s\n' "$PATCH_SIGNED_FILE"

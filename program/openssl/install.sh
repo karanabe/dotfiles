@@ -1,22 +1,27 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
-export OPENSSL_VERSION=3.5.1
+OPENSSL_VERSION=${OPENSSL_VERSION:-3.5.1}
 
-if [ "$UID" -ne 0 ]; then
-  echo "[FAIL] Please run as root"
+if (( EUID != 0 )); then
+  printf '[FAIL] Please run as root.\n' >&2
   exit 1
 fi
 
-echo "[PASS] Root check"
+printf '[PASS] Root check.\n'
+
+TEMPORARY_DIR=$(mktemp -d)
+trap 'rm -rf -- "$TEMPORARY_DIR"' EXIT
+ARCHIVE="$TEMPORARY_DIR/openssl-$OPENSSL_VERSION.tar.gz"
 
 mkdir -p /usr/local/musl/include
-cd /tmp
-curl -fLO "https://www.openssl.org/source/openssl-$OPENSSL_VERSION.tar.gz"
-tar xvzf "openssl-$OPENSSL_VERSION.tar.gz" && cd "openssl-$OPENSSL_VERSION"
+curl --fail --location --show-error \
+  "https://www.openssl.org/source/openssl-$OPENSSL_VERSION.tar.gz" \
+  --output "$ARCHIVE"
+tar -xzf "$ARCHIVE" -C "$TEMPORARY_DIR"
+cd -- "$TEMPORARY_DIR/openssl-$OPENSSL_VERSION"
 ./config -fPIC no-shared no-async --prefix=/usr/local/musl --openssldir=/usr/local/musl/ssl
-make -j$(nproc)
+make -j"$(nproc)"
 make install
-rm -r /tmp/openssl-$OPENSSL_VERSION
 
-echo "[PASS] Install complete"
-
+printf '[PASS] Install complete.\n'

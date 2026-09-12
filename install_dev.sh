@@ -1,10 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
-sudo apt install -y build-essential dnsutils
-
-# Install rust-analyzer
-# https://rust-analyzer.github.io/manual.html#rust-analyzer-language-server-binary
-#
-# Install rg / ripgrep
-# https://github.com/BurntSushi/ripgrep
-# download from release and put file to ~/.local/bin
+sudo apt-get update
+sudo apt-get install -y build-essential dnsutils ripgrep

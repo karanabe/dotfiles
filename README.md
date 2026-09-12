@@ -1,104 +1,87 @@
 # karanabe's dotfiles
 
+Personal development environment for Debian/Ubuntu with Zsh, Neovim, uv, and
+Volta.
 
-## How to setup
+## Setup
 
 ```shell
-$ sudo apt update && sudo apt -y upgrade
-$ sudo apt install git curl
-$ mkdir -p $HOME/project/code
-$ sudo chmod 700 project
-$ cd $HOME/project/code
-$ git clone https://github.com/karanabe/dotfiles.git
-$ cd dotfiles
-$ ./unlink.sh
-$ ./setup_zsh.sh
-$ ./install.sh
-$ # ./install_dev.sh
+sudo apt-get update
+sudo apt-get install -y git curl
+mkdir -p "$HOME/project/code"
+cd "$HOME/project/code"
+git clone https://github.com/karanabe/dotfiles.git
+cd dotfiles
+./install.sh
+./setup_zsh.sh
+chsh -s /bin/zsh
+exec zsh -l
 ```
 
+The setup is idempotent for links already managed by this checkout. It refuses
+to replace existing files, directories, or links pointing elsewhere. Move or
+back up conflicting paths explicitly before retrying; in particular, never
+discard an existing `.ssh` or `.gnupg` directory without inspecting it.
 
-## Change login shell
+`unlink.sh` removes only links that point to this checkout. It does not remove
+the files or directories behind those links.
 
-`chsh -s /bin/zsh`
+## Toolchains
 
+Python is managed by [uv](https://docs.astral.sh/uv/), Node.js by
+[Volta](https://docs.volta.sh/guide/getting-started), and the editor is
+[Neovim](https://neovim.io/).
 
-## ssh-keygen
-
-ssh-keygen -t ed25519 -C "email or name"
-
-
-## Update editor
-
-`sudo update-alternatives --config editor`
-
-
-## install program languages
-
-```bash
-program/nodenv/install.sh
-program/ruby/install.sh
-program/rust/install.sh
+```shell
 program/python/install.sh
+program/nodejs/install.sh
+program/rust/install.sh
+program/ruby/install.sh
+program/golang/install.sh
 ```
 
+The Python and Node.js installers do not modify shell startup files. Their
+environment variables and executable paths are owned by `.common_export`, which
+is linked as `~/.zshenv`.
 
-### python
+Git identity remains machine-local. Create it once before signing commits:
 
-```bash
-pyenv install --list
-pyenv install 3.12.0
-source ~/.zprofile
-mkdir -p $HOME/.local/usr/pydev
-cd $HOME/.local/usr/pydev
-python -m venv dev
+```shell
+cp .gitconfig.user.example "$HOME/.gitconfig.user"
+nvim "$HOME/.gitconfig.user"
 ```
 
+## Updates
 
-### nodenv
-
-```bash
-nodenv install 20.10.0
-nodenv global 20.10.0
-npm install -g pnpm
+```shell
+./update.sh             # repository and Zsh plugins
+./update.sh --system    # also upgrade system packages
+program/python/update.sh
+program/nodejs/update.sh
+program/rust/update.sh
+program/ruby/update.sh
 ```
 
-### ruby
+## Validation
 
-```bash
-rbenv install 3.2.2
-rbenv global 3.2.2
+Run the non-destructive setup tests with:
 
-# https://pages.github.com/versions/
-rbenv install 2.7.4
+```shell
+bash tests/dotfiles_test.sh
 ```
 
+Neovim and tmux key bindings are documented in [docs/keymap.md](docs/keymap.md).
 
-## gpg key
+## GPG keys
 
-```bash
-# create ECC and Curve 25519
+```shell
 gpgen
-gpedit <key_name>
-
-# add subkey for sign
-addkey
-
-# check key file name
+gpedit <key-name>
 gprip
-
-# export
-gpexp > public.key
-gpexpsec > secret.key
-
-# delete
-gprm <keygrip_name>
+gpexp >public.key
+gpexpsec >secret.key
 ```
 
+## License
 
-### License
-
-<sup>
-Licensed under <a href="LICENSE">The Unlicense</a>.
-</sup>
-
+Licensed under [The Unlicense](LICENSE).

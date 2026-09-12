@@ -1,5 +1,8 @@
-export VOLTA_HOME="$HOME/.volta"
-export PATH="$VOLTA_HOME/bin:$PATH"
+# Node.js
 
-Change install directory - VOLTA_HOME
+Node.js is managed by Volta. Run `./install.sh` in this directory to install
+Volta without modifying shell startup files, then install the current Node.js
+LTS release. `VOLTA_HOME` and `PATH` are managed by the repository's `.zshenv`.
 
+Run `./update.sh` in this directory to select the latest LTS release as the
+default Node.js version.

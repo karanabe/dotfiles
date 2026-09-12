@@ -1,10 +1,2 @@
-#!/bin/bash
-# Load zshrc
-#test -r $HOME/.zshrc && . $HOME/.zshrc
-
-# Load the shell dotfiles
-for file in $HOME/.{zshalias,zshenv}; do
-  test -r $file && . $file
-done
-unset file
-
+# Login-shell configuration belongs here. Environment variables are loaded
+# earlier from ~/.zshenv, while interactive features are loaded from ~/.zshrc.

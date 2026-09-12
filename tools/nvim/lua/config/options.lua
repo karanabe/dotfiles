@@ -2,7 +2,7 @@
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here
 
--- Enable LazyVim auto format
+-- Keep formatting opt-in.
 vim.g.autoformat = false
 vim.g.lazyvim_picker = "telescope"
 
@@ -22,7 +22,7 @@ opt.shiftround = true -- Round indent
 opt.shiftwidth = 4 -- Size of an indent
 opt.tabstop = 4 -- Number of spaces tabs count for
 
-vim.api.nvim_set_option("scrolloff", 4)
+opt.scrolloff = 4
 
 -- LSP Server to use for Python.
 -- Set to "basedpyright" to use basedpyright instead of pyright.

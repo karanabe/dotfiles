@@ -4,62 +4,57 @@
 
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
+local indent_group = augroup("UserIndent", { clear = true })
+
+local function set_indent(pattern, width, expandtab)
+  autocmd("FileType", {
+    group = indent_group,
+    pattern = pattern,
+    callback = function()
+      if expandtab ~= nil then
+        vim.opt_local.expandtab = expandtab
+      end
+      vim.opt_local.shiftwidth = width
+      vim.opt_local.tabstop = width
+    end,
+  })
+end
 
 autocmd("FileType", {
-  group = augroup("setLineLength", { clear = true }),
+  group = augroup("UserTextDisplay", { clear = true }),
   pattern = { "text", "markdown" },
   callback = function()
     vim.opt_local.colorcolumn = "0"
   end,
 })
 
-autocmd("FileType", {
-  group = augroup("setIndent2", { clear = true }),
-  pattern = {
-    "xml",
-    "html",
-    "xhtml",
-    "css",
-    "scss",
-    "javascript",
-    "typescript",
-    "javascriptreact",
-    "typescriptreact",
-    "yaml",
-    "lua",
-    "java",
-    "c",
-    "cpp",
-    "ruby",
-    "bash",
-  },
-  callback = function()
-    vim.opt_local.shiftwidth = 2
-    vim.opt_local.tabstop = 2
-  end,
-})
+set_indent({
+  "xml",
+  "html",
+  "xhtml",
+  "css",
+  "scss",
+  "javascript",
+  "typescript",
+  "javascriptreact",
+  "typescriptreact",
+  "yaml",
+  "lua",
+  "java",
+  "c",
+  "cpp",
+  "ruby",
+  "sh",
+  "bash",
+  "zsh",
+}, 2)
 
-autocmd("FileType", {
-  group = augroup("setIndent4", { clear = true }),
-  pattern = { "python", "rust" },
-  callback = function()
-    vim.opt_local.shiftwidth = 4
-    vim.opt_local.tabstop = 4
-  end,
-})
+set_indent({ "python", "rust" }, 4)
 
-autocmd("FileType", {
-  group = augroup("setIndentTab", { clear = true }),
-  pattern = { "go", "make" },
-  callback = function()
-    vim.opt_local.expandtab = false
-    vim.opt_local.shiftwidth = 4
-    vim.opt_local.tabstop = 4
-  end,
-})
+set_indent({ "go", "make" }, 4, false)
 
 autocmd({ "BufRead", "BufNewFile" }, {
-  group = augroup("setShebangFiletype", { clear = true }),
+  group = augroup("UserShebangFiletype", { clear = true }),
   pattern = "*",
   callback = function(args)
     if vim.bo[args.buf].filetype ~= "" then
@@ -78,7 +73,7 @@ autocmd({ "BufRead", "BufNewFile" }, {
 })
 
 autocmd("FileType", {
-  group = augroup("markdownSpell", { clear = true }),
+  group = augroup("UserMarkdownSpell", { clear = true }),
   pattern = { "markdown" },
   callback = function()
     vim.opt_local.spell = false

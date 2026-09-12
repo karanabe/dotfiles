@@ -1,18 +1,40 @@
-#!/bin/bash
+#!/usr/bin/env zsh
+_dotfiles_root() {
+	local record_file="$HOME/.local/.dotfiles"
+	local repository_root
+	if [[ ! -r "$record_file" ]]; then
+		print -u2 -- "dotfiles path file not found: $record_file"
+		return 1
+	fi
+	repository_root=$(<"$record_file")
+	if [[ -z "$repository_root" || ! -d "$repository_root" ]]; then
+		print -u2 -- "invalid dotfiles path in $record_file"
+		return 1
+	fi
+	print -r -- "$repository_root"
+}
+
 # update
-alias dotup="$(cat $HOME/.local/.dotfiles)/update.sh && . $HOME/.bash_profile"
+dotup() {
+	local dotfiles_dir
+	dotfiles_dir=$(_dotfiles_root) || return
+	"$dotfiles_dir/update.sh" && source "$HOME/.zshrc"
+}
 
 # global
 alias sudo='sudo '
-alias dotfiles='cd $(cat $HOME/.local/.dotfiles)'
+dotfiles() {
+	local dotfiles_dir
+	dotfiles_dir=$(_dotfiles_root) || return
+	cd -- "$dotfiles_dir"
+}
 alias lstat="stat --format='%a %A %10U %10G %20F %n' ./* .*"
 alias lstats="stat --printf='%a %A %10U %10G %20F %n\n'"
 alias lgrep="stat --format='%a %A %10U %10G %20F %n' ./* .* | grep"
 
 # editor
-alias nvim="$HOME/.local/opt/nvim/currVer/bin/nvim"
-alias vim="$HOME/.local/opt/nvim/currVer/bin/nvim"
-alias vi="$HOME/.local/opt/nvim/currVer/bin/nvim"
+alias vim='nvim'
+alias vi='nvim'
 
 # docker
 alias dc="docker-compose"
@@ -21,8 +43,8 @@ alias dcd="docker-compose -p docker down"
 alias dcs="docker-compose -p docker stop"
 alias dstart="docker start"
 alias dstop="docker stop"
-dce() { docker-compose -p docker exec $1 /bin/bash; }
-de() { docker exec -it $1 /bin/bash --login; }
+dce() { docker-compose -p docker exec "$1" /bin/bash; }
+de() { docker exec -it "$1" /bin/bash --login; }
 alias drmi="docker rmi"
 alias drm="docker rm"
 alias di="docker images"
@@ -40,15 +62,19 @@ alias tcpdump="sudo tcpdump"
 alias psa="ps aux"
 
 # ls
-alias ls="eza --git --hyperlink --header"
-alias lsa="eza -la --git --hyperlink --header; pwd"
-alias ll="eza -l --git --hyperlink --header; pwd"
+if (( $+commands[eza] )); then
+	alias ls="eza --git --hyperlink --header"
+	alias lsa="eza -la --git --hyperlink --header; pwd"
+	alias ll="eza -l --git --hyperlink --header; pwd"
+else
+	alias lsa="ls -la; pwd"
+	alias ll="ls -l; pwd"
+fi
 
 # terminal
 alias cl="clear && pwd"
 
 # less
-alias les="/usr/share/vim/vim90/macros/less.sh"
 alias less="/usr/bin/less"
 
 # grep
@@ -67,7 +93,7 @@ alias targz="tar zxf"
 # git
 alias cgit="chronogit"
 alias gitinit="git commit --allow-empty -m 'initial commit'"
-gitupstream() { git remote add upstream $1; }
+gitupstream() { git remote add upstream "$1"; }
 gitupfetch() {
 	git fetch upstream
 	git checkout main
@@ -83,9 +109,24 @@ alias gpm="git push origin master"
 alias gpf="git push -f"
 alias gpfm="git push -f origin master"
 alias gco="git checkout"
-gpta() { git reset --hard HEAD^ && git am --3way ./patch/$@; }
+gpta() {
+	if (( $# != 1 )); then
+		print -u2 -- 'usage: gpta <patch-file>'
+		return 2
+	fi
+	if ! git diff --quiet || ! git diff --cached --quiet; then
+		print -u2 -- 'refusing to reset a repository with uncommitted changes'
+		return 1
+	fi
+	local patch_file="./patch/$1"
+	if [[ ! -f "$patch_file" ]]; then
+		print -u2 -- "patch not found: $patch_file"
+		return 1
+	fi
+	git reset --hard HEAD^ && git am --3way "$patch_file"
+}
 alias gsign="gitsign"
-alias proot='cd $(git rev-parse --show-toplevel)'
+proot() { cd -- "$(git rev-parse --show-toplevel)"; }
 
 # gpg
 ## Expire
@@ -102,35 +143,37 @@ alias gpgen="gpg --expert --full-gen-key"
 alias gprip="gpg --with-keygrip --list-key"
 alias gpexp="gpg --armor --export"
 alias gpexpsec="gpg --armor --export-secret-key"
-gprm() { rm ~/.gnupg/private-keys-v1.d/$1.key; }
+gprm() {
+	if (( $# != 1 )) || [[ -z "$1" || "$1" == *[^[:xdigit:]]* ]]; then
+		print -u2 -- 'usage: gprm <hex-keygrip>'
+		return 2
+	fi
+	rm -i -- "$HOME/.gnupg/private-keys-v1.d/$1.key"
+}
 
 # ssh
 alias sshgen="ssh-keygen -t ed25519 -C"
 
-# python3
-alias venv='source $HOME/.local/usr/venv/dev/bin/activate'
+# python / uv
 alias von="source .venv/bin/activate"
 alias voff='deactivate'
 alias pip="uv pip"
 
-# python2
-alias venv2='source $HOME/.local/usr/pydev/dev2/bin/activate'
-
 # rust
-#alias cargo="docker run --rm --user $(id -u):$(id -g) --env PATH='/home/rust/.cargo/bin:$PATH' -v $HOME/.cargo/registry:/home/rust/.cargo/registry -v $HOME/.cargo/credentials:/home/rust/.cargo/credentials -v $PWD:/tmp/dev -w /tmp/dev rust:latest cargo"
-#alias rustc="docker run --rm --user $(id -u):$(id -g) --env PATH='/home/rust/.cargo/bin:$PATH' -v $HOME/.cargo/registry:/home/rust/.cargo/registry -v $HOME/.cargo/credentials:/home/rust/.cargo/credentials -v $PWD:/tmp/dev -w /tmp/dev rust:latest rustc"
 cargobin() {
-	git clone git@github.com:karanabe/rust-template.git ./$1
-	cd $1
-	rm -rf .git
+	if (( $# != 1 )) || [[ -z "$1" || "$1" == *[^A-Za-z0-9_-]* ]]; then
+		print -u2 -- 'usage: cargobin <crate-name>'
+		return 2
+	fi
+	git clone git@github.com:karanabe/rust-template.git "./$1" || return
+	cd -- "$1" || return
+	rm -rf -- .git
 	git init
 	git commit --allow-empty -m 'Init commit'
-	grep -rl 'rust-template' . | xargs sed -i -e "s/rust-template/$1/g"
+	while IFS= read -r file; do
+		sed -i -e "s/rust-template/$1/g" "$file"
+	done < <(grep -rl --exclude-dir=.git 'rust-template' .)
 }
-
-# python
-#alias py="docker run --rm --user "$(id -u)":"$(id -g)" -v "$PWD":"$PWD" -w "$PWD" python:3.9-slim-buster python"
-#alias pi="docker run --rm --user "$(id -u)":"$(id -g)" -v "$PWD":"$PWD" -w "$PWD" python:3.9-slim-buster pip"
 
 # alphabet
 alias a="apt"

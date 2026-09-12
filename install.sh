@@ -1,57 +1,96 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
-setup-devtools () {
-  # Shell
-  sudo apt -y install zsh
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+# shellcheck source=lib/dotfiles.sh
+source "$SCRIPT_DIR/lib/dotfiles.sh"
 
-  # editor
-  # sudo apt -y install vim
-
-  # version control
-  sudo apt -y install git
-
-  # terminal
-  sudo apt -y install tmux
-  # Secure Shell
-  sudo apt -y install ssh
-
-  # network
-  sudo apt -y install wget curl
-
-  # tar
-  sudo apt -y install xz-utils
-
-  # secure
-  sudo apt -y install gpg
-
-  sudo apt -y install rsync psmisc iproute2 strace lsof
+install_system_packages() {
+  sudo apt-get update
+  sudo apt-get install -y \
+    curl \
+    git \
+    gnupg \
+    iproute2 \
+    lsof \
+    psmisc \
+    rsync \
+    ssh \
+    strace \
+    tmux \
+    wget \
+    xz-utils \
+    zsh
 }
 
-## Initial setup not docker
-if [ -z "$IS_DOCKER" ]; then
-  # Update
-  sudo apt -y update && sudo apt -y upgrade
+install_neovim() (
+  set -Eeuo pipefail
 
-  setup-devtools
+  local architecture archive_name extracted_name
+  case "$(uname -m)" in
+    x86_64)
+      architecture=x86_64
+      ;;
+    aarch64 | arm64)
+      architecture=arm64
+      ;;
+    *)
+      dotfiles_error "Unsupported Neovim architecture: $(uname -m)"
+      return 1
+      ;;
+  esac
+
+  archive_name="nvim-linux-$architecture.tar.gz"
+  extracted_name="nvim-linux-$architecture"
+
+  local install_root="$HOME/.local/opt/nvim"
+  local releases_root="$install_root/releases"
+  local temporary_dir
+  temporary_dir="$(mktemp -d "$install_root/.install.XXXXXX")"
+  trap 'rm -rf -- "$temporary_dir"' EXIT
+
+  curl --fail --location --show-error --silent \
+    "https://github.com/neovim/neovim/releases/latest/download/$archive_name" \
+    --output "$temporary_dir/$archive_name"
+  tar -xzf "$temporary_dir/$archive_name" -C "$temporary_dir"
+
+  local version release_dir current_link temporary_link
+  version=$("$temporary_dir/$extracted_name/bin/nvim" --version | sed -n '1s/^NVIM //p')
+  if [[ -z "$version" ]]; then
+    dotfiles_error 'Could not determine the downloaded Neovim version.'
+    return 1
+  fi
+
+  release_dir="$releases_root/$version-$architecture"
+  mkdir -p -- "$releases_root"
+  if [[ ! -d "$release_dir" ]]; then
+    mv -- "$temporary_dir/$extracted_name" "$release_dir"
+  fi
+
+  current_link="$install_root/currVer"
+  if [[ -e "$current_link" && ! -L "$current_link" ]]; then
+    dotfiles_error "Refusing to replace non-link path: $current_link"
+    return 1
+  fi
+  temporary_link="$install_root/.currVer.$$"
+  ln -s -- "$release_dir" "$temporary_link"
+  mv -Tf -- "$temporary_link" "$current_link"
+  printf '[dotfiles] Neovim %s is active.\n' "$version"
+)
+
+dotfiles_prepare_home
+
+if [[ -z "${IS_DOCKER:-}" ]]; then
+  install_system_packages
 fi
 
-# dotfile dir
-echo $(cd $(dirname $BASH_SOURCE); pwd) > $HOME/.local/.dotfiles
+install_neovim
+dotfiles_clone_or_update \
+  https://github.com/zsh-users/zsh-syntax-highlighting.git \
+  "$HOME/.local/share/zsh-syntax-highlighting"
+dotfiles_clone_or_update \
+  https://github.com/zsh-users/zsh-autosuggestions.git \
+  "$HOME/.local/share/zsh-autosuggestions"
+dotfiles_record_repo "$SCRIPT_DIR"
 
-# nvim
-mkdir -p $HOME/.local/opt/nvim
-cd $HOME/.local/opt/nvim
-curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz > nvim-linux64.tar.gz
-tar zxf nvim-linux64.tar.gz
-ln -s nvim-linux64 currVer
-
-# zsh plugin setup
-# zsh-syntax-highlighting
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.local/share/zsh-syntax-highlighting
-
-# zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-autosuggestions.git $HOME/.local/share/zsh-autosuggestions
-
-
-echo "[+] Complete"
-
+printf '[dotfiles] Installation complete.\n'

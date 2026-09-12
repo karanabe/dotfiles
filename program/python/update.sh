@@ -1,5 +1,9 @@
-#!/bin/sh
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
-cd $HOME/.local/lang/pyenv
-git pull
-echo "[+] Done. Update pyenv."
+if ! command -v uv >/dev/null 2>&1; then
+  printf 'uv is not installed; run program/python/install.sh first.\n' >&2
+  exit 1
+fi
+
+UV_NO_MODIFY_PATH=1 uv self update

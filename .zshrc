@@ -12,6 +12,10 @@ setopt promptsubst         # enable command substitution in prompt
 
 WORDCHARS=${WORDCHARS//\/} # Don't consider certain characters part of the word
 
+if command -v rbenv >/dev/null 2>&1; then
+    eval "$(rbenv init -)"
+fi
+
 # hide EOL sign ('%')
 PROMPT_EOL_MARK=""
 
@@ -31,7 +35,10 @@ bindkey '^[[H' beginning-of-line                  # home
 bindkey '^[[F' end-of-line                        # end
 bindkey '^[[Z' undo                               # shift + tab undo last action
 
-# enable completion features
+# Enable completion after extending fpath for locally installed tools.
+if [[ -d "$HOME/.grok/completions/zsh" ]]; then
+    fpath=("$HOME/.grok/completions/zsh" $fpath)
+fi
 autoload -Uz compinit
 compinit -d ~/.cache/zcompdump
 zstyle ':completion:*:*:*:*:*' menu select
@@ -94,22 +101,21 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 parse_git_branch() {
-    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
+    git symbolic-ref --quiet --short HEAD 2> /dev/null
 }
 
 git_prompt() {
-  GIT_BRANCH=`parse_git_branch`
-  if [ -n "$GIT_BRANCH" ]; then
-    echo -en " (${GIT_BRANCH})"
+  local git_branch
+  git_branch=$(parse_git_branch)
+  if [ -n "$git_branch" ]; then
+    echo -en " (${git_branch})"
   else
     echo -en ""
   fi
 }
 
-HOSTNAME=$(hostname)
-
 prompt_capital_host() {
-    echo "$(tr '[:lower:]' '[:upper:]' <<< $HOSTNAME)"
+    print -r -- "${HOST:u}"
 }
 
 configure_prompt() {
@@ -284,10 +290,10 @@ fi
 #test -r $HOME/.zprofile && . $HOME/.zprofile
 
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+# Load personal aliases after defaults so they take precedence.
+[[ -r "$HOME/.zshalias" ]] && source "$HOME/.zshalias"
+
+# Keep SDKMAN initialization at the end of the interactive configuration.
+export GPG_TTY=$TTY
 export SDKMAN_DIR="$HOME/.local/lang/sdkman"
 [[ -s "$HOME/.local/lang/sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.local/lang/sdkman/bin/sdkman-init.sh"
-
-export PATH="$HOME/.grok/bin:$PATH"
-fpath=(~/.grok/completions/zsh $fpath)
-autoload -Uz compinit && compinit -C

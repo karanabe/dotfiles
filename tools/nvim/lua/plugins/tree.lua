@@ -1,3 +1,5 @@
+local icons = require("config.icons")
+
 return {
   "nvim-tree/nvim-tree.lua",
   version = "*",
@@ -11,14 +13,14 @@ return {
 
     require("nvim-tree").setup({
       on_attach = function(bufnr)
-        local api = require "nvim-tree.api"
+        local api = require("nvim-tree.api")
 
         local function opts(desc)
           return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
         end
-    
+
         api.config.mappings.default_on_attach(bufnr)
-    
+
         -- vim.keymap.set("n", "l", api.node.open.edit, opts "Open")
         -- vim.keymap.set("n", "h", api.node.navigate.parent_close, opts "Close Directory")
         vim.keymap.set("n", "v", api.node.open.vertical, opts "Open: Vertical Split")
@@ -56,27 +58,27 @@ return {
           padding = " ",
           symlink_arrow = " ➛ ",
           glyphs = {
-            default = require('config.icons').ui.Text,
-            symlink = require('config.icons').ui.FileSymlink,
-            bookmark = require('config.icons').ui.BookMark,
+            default = icons.ui.Text,
+            symlink = icons.ui.FileSymlink,
+            bookmark = icons.ui.BookMark,
             folder = {
-              arrow_closed = require('config.icons').ui.ChevronRight,
-              arrow_open = require('config.icons').ui.ChevronShortDown,
-              default = require('config.icons').ui.Folder,
-              open = require('config.icons').ui.FolderOpen,
-              empty = require('config.icons').ui.EmptyFolder,
-              empty_open = require('config.icons').ui.EmptyFolderOpen,
-              symlink = require('config.icons').ui.FolderSymlink,
-              symlink_open = require('config.icons').ui.FolderOpen,
+              arrow_closed = icons.ui.ChevronRight,
+              arrow_open = icons.ui.ChevronShortDown,
+              default = icons.ui.Folder,
+              open = icons.ui.FolderOpen,
+              empty = icons.ui.EmptyFolder,
+              empty_open = icons.ui.EmptyFolderOpen,
+              symlink = icons.ui.FolderSymlink,
+              symlink_open = icons.ui.FolderOpen,
             },
             git = {
-              unstaged = require('config.icons').git.FileUnstaged,
-              staged = require('config.icons').git.FileStaged,
-              unmerged = require('config.icons').git.FileUnmerged,
-              renamed = require('config.icons').git.FileRenamed,
-              untracked = require('config.icons').git.FileUntracked,
-              deleted = require('config.icons').git.FileDeleted,
-              ignored = require('config.icons').git.FileIgnored,
+              unstaged = icons.git.FileUnstaged,
+              staged = icons.git.FileStaged,
+              unmerged = icons.git.FileUnmerged,
+              renamed = icons.git.FileRenamed,
+              untracked = icons.git.FileUntracked,
+              deleted = icons.git.FileDeleted,
+              ignored = icons.git.FileIgnored,
             },
           },
         },
@@ -89,7 +91,7 @@ return {
       actions = {
         expand_all = {
           max_folder_discovery = 100,
-          exclude = { '.git', 'target', 'build' },
+          exclude = { ".git", "target", "build" },
         },
       },
       update_focused_file = {
@@ -98,7 +100,7 @@ return {
         update_root = true,
         ignore_list = {},
       },
-  
+
       diagnostics = {
         enable = true,
         show_on_dirs = false,
@@ -109,10 +111,10 @@ return {
           max = vim.diagnostic.severity.ERROR,
         },
         icons = {
-          hint = require('config.icons').diagnostics.BoldHint,
-          info = require('config.icons').diagnostics.BoldInformation,
-          warning = require('config.icons').diagnostics.BoldWarning,
-          error = require('config.icons').diagnostics.BoldError,
+          hint = icons.diagnostics.BoldHint,
+          info = icons.diagnostics.BoldInformation,
+          warning = icons.diagnostics.BoldWarning,
+          error = icons.diagnostics.BoldError,
         },
       },
     })

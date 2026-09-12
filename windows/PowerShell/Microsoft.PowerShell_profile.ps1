@@ -1,31 +1,53 @@
-function parse_git_branch {
-  git branch 2>$null |
-  ForEach-Object {
-    if($_[0] -eq "*") { ($_ -Split " ")[1] }
+function Get-GitBranch {
+  if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
+    return
+  }
+
+  $branch = git branch --show-current 2>$null
+  if ($LASTEXITCODE -eq 0) {
+    $branch
   }
 }
 
-function prompt () {
-  (Get-Host).UI.RawUI.WindowTitle = "Windows PowerShell " + $pwd
-  Write-Host $($env:USERNAME) -NoNewline -ForegroundColor Cyan
-  Write-Host " at " -NoNewline
-  Write-Host $($env:COMPUTERNAME) -NoNewline -ForegroundColor Magenta
-  Write-Host " in " -NoNewline
-  Write-Host (Split-Path (Get-Location) -Leaf) -NoNewline -ForegroundColor Yellow
-  Write-Host " on " -NoNewline
-  Write-Host "(" -NoNewline -ForegroundColor Green
-  $PY_ENV = ($env:VIRTUAL_ENV -Split "\\")[-1]
-  Write-Host ($PY_ENV -Split "/")[0] -NoNewline -ForegroundColor Green
-  $GIT_BRANCH = (parse_git_branch)
-  if ( $GIT_BRANCH ){
-    Write-Host /$($GIT_BRANCH) -NoNewline -ForegroundColor Green
-  }
-  Write-Host ")" -NoNewline -ForegroundColor Green
-  Write-Host " >" -NoNewline -ForegroundColor Red
-  Write-Host ">" -NoNewline -ForegroundColor Yellow
-  Write-Host ">" -NoNewline -ForegroundColor Green
-  return " "
+function Write-PromptSegment {
+  param(
+    [Parameter(Mandatory = $true)]
+    [string]$Text,
+
+    [Parameter(Mandatory = $true)]
+    [ConsoleColor]$Color
+  )
+
+  Write-Host $Text -NoNewline -ForegroundColor $Color
 }
+
+function prompt {
+  $location = Get-Location
+  (Get-Host).UI.RawUI.WindowTitle = "Windows PowerShell $location"
+
+  Write-PromptSegment -Text $env:USERNAME -Color Cyan
+  Write-Host ' at ' -NoNewline
+  Write-PromptSegment -Text $env:COMPUTERNAME -Color Magenta
+  Write-Host ' in ' -NoNewline
+  Write-PromptSegment -Text (Split-Path $location -Leaf) -Color Yellow
+
+  $context = @()
+  if ($env:VIRTUAL_ENV) {
+    $context += Split-Path $env:VIRTUAL_ENV -Leaf
+  }
+  $branch = Get-GitBranch
+  if ($branch) {
+    $context += $branch
+  }
+  if ($context.Count -gt 0) {
+    Write-Host ' on ' -NoNewline
+    Write-PromptSegment -Text ('({0})' -f ($context -join '/')) -Color Green
+  }
+
+  Write-PromptSegment -Text ' >' -Color Red
+  Write-PromptSegment -Text '>' -Color Yellow
+  Write-PromptSegment -Text '>' -Color Green
+  return ' '
+}
+
 $Env:VIRTUAL_ENV_DISABLE_PROMPT = 1
-Invoke-Expression "$env:USERPROFILE\venv\dev\Scripts\Activate.ps1"
-Set-Location "$env:USERPROFILE"

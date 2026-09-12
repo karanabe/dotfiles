@@ -2,9 +2,6 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 
--- leader
-vim.g.mapleader = " "
-
 local mapset = vim.keymap.set
 
 -- jj
@@ -62,31 +59,27 @@ mapset("n", "<leader>re", "<cmd>RustLsp explainError<cr>", { desc = "Rust Explai
 mapset("n", "<leader>rd", "<cmd>RustLsp renderDiagnostic<cr>", { desc = "Rust Diagnostic", remap = true })
 mapset("n", "<leader>rc", "<cmd>RustLsp codeAction<cr>", { desc = "Rust Code Action", remap = true })
 
--- カーソルのある行の末尾にセミコロンを追加する関数
-function InsertEndSemicolon()
-  -- カーソルの現在位置を取得する
-  local currentPosition = vim.api.nvim_win_get_cursor(0)
-
-  -- 行末にセミコロンがなかったら挿入する
+local function insert_end_semicolon()
+  local cursor = vim.api.nvim_win_get_cursor(0)
   local line = vim.api.nvim_get_current_line()
   if not line:match(";$") then
     vim.api.nvim_set_current_line(line .. ";")
   end
-
-  -- カーソル位置を戻す
-  vim.api.nvim_win_set_cursor(0, currentPosition)
+  vim.api.nvim_win_set_cursor(0, cursor)
 end
 
--- mapset("n", ";", "<cmd>lua InsertEndSemicolon()<cr>", { noremap = true, silent = true })
-mapset("i", ";;", "<cmd>lua InsertEndSemicolon()<cr>", { noremap = true, silent = true })
-mapset("i", ";j", "<cmd>lua InsertEndSemicolon()<cr><ESC>", { noremap = true, silent = true })
+mapset("i", ";;", insert_end_semicolon, { desc = "Append semicolon", silent = true })
+mapset("i", ";j", function()
+  insert_end_semicolon()
+  vim.cmd.stopinsert()
+end, { desc = "Append semicolon and leave insert mode", silent = true })
 
 local function open_call_hierarchy()
   local ok, telescope = pcall(require, "telescope.builtin")
   local lsp = vim.lsp.buf
   local items = {
-    { label = "Incoming Calls", action = ok and telescope.lsp_incoming_calls or lsp.incoming_calls },
-    { label = "Outgoing Calls", action = ok and telescope.lsp_outgoing_calls or lsp.outgoing_calls },
+    { label = "Incoming Calls", action = (ok and telescope.lsp_incoming_calls) or lsp.incoming_calls },
+    { label = "Outgoing Calls", action = (ok and telescope.lsp_outgoing_calls) or lsp.outgoing_calls },
   }
   vim.ui.select(items, { prompt = "Call Hierarchy" }, function(choice)
     if choice then
@@ -107,25 +100,22 @@ local function telescope_or_lsp(telescope_name, lsp_name)
 end
 
 vim.api.nvim_create_autocmd("LspAttach", {
-  group = vim.api.nvim_create_augroup("user_lsp_keymaps", { clear = true }),
+  group = vim.api.nvim_create_augroup("UserLspKeymaps", { clear = true }),
   callback = function(event)
-    local opts = function(desc)
-      return { buffer = event.buf, desc = desc }
+    local mappings = {
+      { "gd", telescope_or_lsp("lsp_definitions", "definition"), "Goto Definition" },
+      { "gr", telescope_or_lsp("lsp_references", "references"), "References" },
+      { "gI", telescope_or_lsp("lsp_implementations", "implementation"), "Goto Implementation" },
+      { "gy", telescope_or_lsp("lsp_type_definitions", "type_definition"), "Goto Type Definition" },
+      { "gD", vim.lsp.buf.declaration, "Goto Declaration" },
+      { "K", vim.lsp.buf.hover, "LSP Hover" },
+      { "gK", vim.lsp.buf.signature_help, "Signature Help" },
+      { "gH", open_call_hierarchy, "Call Hierarchy" },
+      { "<leader>ca", vim.lsp.buf.code_action, "Code Action" },
+      { "<leader>cr", vim.lsp.buf.rename, "Rename" },
+    }
+    for _, mapping in ipairs(mappings) do
+      mapset("n", mapping[1], mapping[2], { buffer = event.buf, desc = mapping[3] })
     end
-
-    mapset("n", "gd", telescope_or_lsp("lsp_definitions", "definition"), opts("Goto Definition"))
-    mapset("n", "gr", telescope_or_lsp("lsp_references", "references"), opts("References"))
-    mapset("n", "gI", telescope_or_lsp("lsp_implementations", "implementation"), opts("Goto Implementation"))
-    mapset("n", "gy", telescope_or_lsp("lsp_type_definitions", "type_definition"), opts("Goto Type Definition"))
-    mapset("n", "gD", vim.lsp.buf.declaration, opts("Goto Declaration"))
-    mapset("n", "K", vim.lsp.buf.hover, opts("LSP Hover"))
-    mapset("n", "gK", vim.lsp.buf.signature_help, opts("Signature Help"))
-    mapset("n", "gH", open_call_hierarchy, opts("Call Hierarchy"))
-    mapset("n", "<leader>ca", vim.lsp.buf.code_action, opts("Code Action"))
-    mapset("n", "<leader>cr", vim.lsp.buf.rename, opts("Rename"))
   end,
 })
-
-mapset("n", "gH", open_call_hierarchy, { desc = "Call Hierarchy" })
-
-mapset("n", "K", vim.lsp.buf.hover, { desc = "LSP Hover" })

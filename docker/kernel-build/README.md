@@ -1,68 +1,34 @@
-# Docker image for linux kernel build
+# Linux kernel build image
 
-OS: Ubuntu 20.04
+The image uses Ubuntu 20.04 and installs the standard Linux kernel build tools.
+It creates a `kb` user using the invoking user's UID and GID so files written to
+mounted volumes remain owned by the host user.
 
-packages: default build tools and git, vim, bc
+## Build
 
+From any directory in this repository:
 
-## WSL2 kernel build
-
-`make LOCALVERSION=-original KCONFIG_CONFIG=Microsoft/config-wsl -j6`
-
-
-## Check processor count
-
-`fgrep 'processor' /proc/cpuinfo | wc -l`
-
-
-## Change remote branch
-
-`git branch -r`
-
-`git checkout -b linux-msft-wsl-5.10.y origin/linux-msft-wsl-5.10.y`
-
-
-## Docker volume permission
-
-`chown $(id -u):$(id -g) -R /home/kb/kernel`
-
-
-## Usage
-
-```bash
-#!/bin/bash
-
-DOCKER_USER="kb"
-DOCKER_SCRIPT="--login"
-
-if [ $# == 1 ]; then
-  DOCKER_USER=$1
-fi
-
-if [  $# == 2 ]; then
-  DOCKER_USER=$1
-  DOCKER_SCRIPT=$2
-fi
-
-docker container run \
-  --net=bridge \
-  -v kernel:/home/kb/kernel \
-  -v /tmp:/home/kb/tmp \
-  -w /home/kb \
-  -it --rm \
-  -e TZ=Asia/Tokyo \
-  -e TERM=xterm-256color \
-  -e IS_DOCKER=true \
-  --user $DOCKER_USER \
-  --name kernel-build \
-  --hostname KERNELBUILD \
-  kb:latest \
-  /bin/bash $DOCKER_SCRIPT
+```shell
+docker/kernel-build/build.sh
 ```
 
+This creates `kernelbuild:latest`.
 
-### License
+## Run
 
-<sup>
-Licensed under <a href="LICENSE">The Unlicense</a>.
-</sup>
+When `.local/bin` is on `PATH`:
+
+```shell
+dkb
+dkb root
+dkb kb /path/to/script
+```
+
+The container mounts the `kernel` volume at `/home/kb/kernel` and removes the
+container when the interactive session ends.
+
+For WSL2 kernels, one typical build command is:
+
+```shell
+make LOCALVERSION=-original KCONFIG_CONFIG=Microsoft/config-wsl -j"$(nproc)"
+```

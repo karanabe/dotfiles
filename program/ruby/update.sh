@@ -1,7 +1,6 @@
-#!/bin/sh
-# Update script for rbenv
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
-# rbenv upgrade
-cd $HOME/.local/lang/rbenv
-git pull
-echo "[+] Done. Update rbenv."
+git -C "$HOME/.local/lang/rbenv" pull --ff-only
+git -C "$HOME/.local/lang/rbenv/plugins/ruby-build" pull --ff-only
+printf '[dotfiles] rbenv updated.\n'

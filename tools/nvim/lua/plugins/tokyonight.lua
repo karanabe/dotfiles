@@ -3,28 +3,25 @@ return {
     "folke/tokyonight.nvim",
     lazy = true,
     priority = 1000,
-    opts = {},
-    config = function()
-      require("tokyonight").setup({
-        style = "night",
-        -- Change colorscheme
-        on_highlights = function(hl, c)
-          hl["@lsp.type.variable"] = { fg = c.green }
+    opts = {
+      style = "night",
+      on_highlights = function(hl, colors)
+        hl["@lsp.type.variable"] = { fg = colors.green }
 
-          hl.Number = { fg = c.yellow }
-          hl.Constant = { fg = c.yellow }
+        hl.Number = { fg = colors.yellow }
+        hl.Constant = { fg = colors.yellow }
 
-          hl.String = { fg = c.orange }
-          hl["@string"] = { fg = c.orange }
-          hl["@lsp.type.string"] = { fg = c.orange }
+        hl.String = { fg = colors.orange }
+        hl["@string"] = { fg = colors.orange }
+        hl["@lsp.type.string"] = { fg = colors.orange }
 
-          hl["@parameter"] = { fg = c.red }
-          hl["@lsp.type.parameter"] = { fg = c.red }
-        end,
-      })
-      -- load the colorscheme here
-      vim.cmd([[colorscheme tokyonight]])
-      -- Change colorscheme
+        hl["@parameter"] = { fg = colors.red }
+        hl["@lsp.type.parameter"] = { fg = colors.red }
+      end,
+    },
+    config = function(_, opts)
+      require("tokyonight").setup(opts)
+      vim.cmd.colorscheme("tokyonight")
     end,
   },
 }

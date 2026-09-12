@@ -1,23 +1,32 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
-# Set current dir
-CURRENT_DIR=$(pwd)
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 
-DOTFILES=`cat $HOME/.local/.dotfiles`
+update_repository() {
+  local label=$1
+  local directory=$2
 
-# Update linux
-sudo apt update && sudo apt -y upgrade
+  if [[ ! -d "$directory/.git" ]]; then
+    printf '[dotfiles] Skipped %s; repository not found: %s\n' "$label" "$directory" >&2
+    return
+  fi
+  printf '[dotfiles] Updating %s...\n' "$label"
+  git -C "$directory" pull --ff-only
+}
 
-# Update this repository
-cd $DOTFILES
-git pull
+if (( $# > 1 )) || { (( $# == 1 )) && [[ "$1" != "--system" ]]; }; then
+  printf 'usage: %s [--system]\n' "${0##*/}" >&2
+  exit 2
+fi
 
-# Update zsh plugins
-cd $HOME/.local/share/zsh-syntax-highlighting
-git pull
+if [[ "${1:-}" == "--system" ]]; then
+  sudo apt-get update
+  sudo apt-get upgrade -y
+fi
 
-cd $HOME/.local/share/zsh-autosuggestions
-git pull
+update_repository dotfiles "$SCRIPT_DIR"
+update_repository zsh-syntax-highlighting "$HOME/.local/share/zsh-syntax-highlighting"
+update_repository zsh-autosuggestions "$HOME/.local/share/zsh-autosuggestions"
 
-cd $CURRENT_DIR
-echo "[+] Done. Update your computer. Have fun!!"
+printf '[dotfiles] Update complete.\n'

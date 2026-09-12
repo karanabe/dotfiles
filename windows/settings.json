@@ -15,10 +15,10 @@
   "[javascript]": {
     "editor.tabSize": 2
   },
-  "[typescirpt]": {
+  "[typescript]": {
     "editor.tabSize": 2
   },
-  "[typescirptreact]": {
+  "[typescriptreact]": {
     "editor.tabSize": 2
   },
   "[html]": {

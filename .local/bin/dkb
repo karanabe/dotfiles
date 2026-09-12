@@ -1,15 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
-DOCKER_USER="kb"
-DOCKER_SCRIPT="--login"
+DOCKER_USER=${1:-kb}
+DOCKER_COMMAND=${2:---login}
+readonly IMAGE_NAME=kernelbuild:latest
 
-if [ $# == 1 ]; then
-  DOCKER_USER=$1
-fi
-
-if [  $# == 2 ]; then
-  DOCKER_USER=$1
-  DOCKER_SCRIPT=$2
+if (( $# > 2 )); then
+  printf 'usage: %s [container-user] [bash-argument]\n' "${0##*/}" >&2
+  exit 2
 fi
 
 docker container run \
@@ -21,9 +19,8 @@ docker container run \
   -e TZ=Asia/Tokyo \
   -e TERM=xterm-256color \
   -e IS_DOCKER=true \
-  --user $DOCKER_USER \
+  --user "$DOCKER_USER" \
   --name kernel-build \
   --hostname KERNELBUILD \
-  kb/docker-kernelbuild:latest \
-  /bin/bash $DOCKER_SCRIPT
-
+  "$IMAGE_NAME" \
+  /bin/bash "$DOCKER_COMMAND"

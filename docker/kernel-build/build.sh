@@ -1,10 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
-USER=$(id -u)
-GROUP=$(id -g)
+HOST_UID=$(id -u)
+HOST_GID=$(id -g)
+readonly IMAGE_NAME=kernelbuild:latest
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 
 docker build \
-  --build-arg USER=$USER \
-  --build-arg GROUP=$GROUP \
-  --tag kernelbuild:latest \
-  .
+  --build-arg "HOST_UID=$HOST_UID" \
+  --build-arg "HOST_GID=$HOST_GID" \
+  --tag "$IMAGE_NAME" \
+  "$SCRIPT_DIR"
