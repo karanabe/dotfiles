@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-curl -LsSf https://astral.sh/uv/install.sh \
-  | env UV_NO_MODIFY_PATH=1 sh
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+
+"$SCRIPT_DIR/update.sh"
 mkdir -p -- "$HOME/.local/lang/uv/tools"
 
 # for build python

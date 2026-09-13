@@ -14,6 +14,22 @@ dotfiles_require_safe_home() {
   fi
 }
 
+dotfiles_require_commands() {
+  local -a missing_commands=()
+  local command_name
+
+  for command_name in "$@"; do
+    if ! command -v "$command_name" >/dev/null 2>&1; then
+      missing_commands+=("$command_name")
+    fi
+  done
+
+  if (( ${#missing_commands[@]} > 0 )); then
+    dotfiles_error "Required commands are missing: ${missing_commands[*]}"
+    return 1
+  fi
+}
+
 dotfiles_prepare_home() {
   dotfiles_require_safe_home || return
 

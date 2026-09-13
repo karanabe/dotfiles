@@ -53,14 +53,21 @@ nvim "$HOME/.gitconfig.user"
 
 ## Updates
 
+The top-level updater refreshes the dotfiles repository, Zsh plugins, uv,
+Volta and the default Node.js LTS release, installed Rust toolchains,
+rbenv/ruby-build, Go, and Neovim. A failed component is reported but does not
+prevent the remaining components from being attempted.
+
 ```shell
-./update.sh             # repository and Zsh plugins
-./update.sh --system    # also upgrade system packages
-program/python/update.sh
-program/nodejs/update.sh
-program/rust/update.sh
-program/ruby/update.sh
+./update.sh             # development tools
+./update.sh --system    # also upgrade APT packages
 ```
+
+Go and Neovim follow their latest stable releases. Downloaded archives are
+verified against SHA-256 digests from the official release metadata before
+installation. Ruby updates refresh rbenv and ruby-build definitions without
+changing project or global Ruby version selections. Neovim plugin revisions
+remain pinned by `tools/nvim/lazy-lock.json`.
 
 ## Validation
 
@@ -68,6 +75,7 @@ Run the non-destructive setup tests with:
 
 ```shell
 bash tests/dotfiles_test.sh
+bash tests/update_test.sh
 ```
 
 Neovim and tmux key bindings are documented in [docs/keymap.md](docs/keymap.md).
